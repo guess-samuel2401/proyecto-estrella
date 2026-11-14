@@ -1,0 +1,24 @@
+{
+  "nombre": "Proyecto Estrella - paleta base",
+  "reglas": "Contornos siempre en Ciruela, nunca negro. Un solo tono de sombra por color, sin degradados.",
+  "colores": [
+    { "nombre": "Ciruela", "hex": "#4A3347", "uso": "contornos" },
+    { "nombre": "Cacao", "hex": "#8A5A44", "uso": "madera, tierra" },
+    { "nombre": "Chocolate", "hex": "#6E4636", "uso": "surcos de tierra regada" },
+    { "nombre": "Canela", "hex": "#C98F6B", "uso": "tierra de cultivo seca" },
+    { "nombre": "Laguna", "hex": "#8CC4DC", "uso": "ondas oscuras del agua" },
+    { "nombre": "Miel", "hex": "#E8A85C", "uso": "macetas, madera clara" },
+    { "nombre": "Mantequilla", "hex": "#FFE08A", "uso": "estrellas, luz" },
+    { "nombre": "Crema", "hex": "#FFF4E0", "uso": "fondos, telas claras" },
+    { "nombre": "Durazno", "hex": "#FFD3B0", "uso": "tonos calidos" },
+    { "nombre": "Algodon", "hex": "#FFE3EA", "uso": "pelaje de la protagonista" },
+    { "nombre": "Rosa", "hex": "#F7A6B4", "uso": "mancha de la protagonista, flores" },
+    { "nombre": "Fresa", "hex": "#F28CA0", "uso": "mejillas, interior de orejas" },
+    { "nombre": "Orquidea", "hex": "#E6A8D7", "uso": "bufanda, telas" },
+    { "nombre": "Coral", "hex": "#E87F86", "uso": "acentos" },
+    { "nombre": "Menta", "hex": "#BFE3B4", "uso": "cesped" },
+    { "nombre": "Salvia", "hex": "#7FBF8E", "uso": "hojas, tallos" },
+    { "nombre": "Cielo", "hex": "#A9D8E8", "uso": "agua, cielo" },
+    { "nombre": "Lavanda", "hex": "#C5B4E3", "uso": "sombras frias, noche" }
+  ]
+}

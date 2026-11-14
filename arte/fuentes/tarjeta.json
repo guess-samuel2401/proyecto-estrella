@@ -1,0 +1,169 @@
+{
+ "nombre": "tarjeta",
+ "descripcion": "Tarjeta de los vecinos (la genera arte/generar-tarjetas.py; no editar a mano).",
+ "colores": {
+  "o": "#4A3347",
+  "w": "#FFF4E0",
+  "b": "#FFFBF3",
+  "e": "#F2DFD0",
+  "h": "#E3C9BC",
+  "p": "#F28CA0",
+  "l": "#FFB3C1",
+  "r": "#E0607E",
+  "d": "#B8456A",
+  "v": "#EADBE0",
+  "s": "#D2BCC6",
+  "g": "#BBA3B0",
+  "m": "#F0C99A",
+  "k": "#FFE6C4",
+  "c": "#C98F6B",
+  "n": "#A87358",
+  "y": "#FFE08A",
+  "f": "#F7A6B4",
+  "a": "#A8D89A",
+  "z": "#6FAE7E",
+  "q": "#B58AA8"
+ },
+ "animaciones": {
+  "retazo": {
+   "fps": 0,
+   "cuadros": [
+    "retazo"
+   ]
+  },
+  "aro": {
+   "fps": 0,
+   "cuadros": [
+    "aro"
+   ]
+  },
+  "corazones": {
+   "fps": 0,
+   "cuadros": [
+    "corazonLleno",
+    "corazonVacio"
+   ]
+  },
+  "adornos": {
+   "fps": 0,
+   "cuadros": [
+    "doblez",
+    "huella",
+    "florecita",
+    "hojita"
+   ]
+  }
+ },
+ "cuadros": {
+  "retazo": [
+   "...oooooooooooooooooo...",
+   ".oobbbbbbbbbbbbbbbbbboo.",
+   ".oewwwewwwewwwewwwewweo.",
+   "obwwppwppwppwppwppwpweho",
+   "obwpewwwewwwewwwewwpeeho",
+   "obwpwwwwwwwwwwwwwwwpweho",
+   "obewwwewwwewwwewwwewweho",
+   "obwpwwwwwwwwwwwwwwwpweho",
+   "obwpewwwewwwewwwewwpeeho",
+   "obwwwwwwwwwwwwwwwwwwweho",
+   "obepwwewwwewwwewwwepweho",
+   "obwpwwwwwwwwwwwwwwwpweho",
+   "obwwewwwewwwewwwewwweeho",
+   "obwpwwwwwwwwwwwwwwwpweho",
+   "obepwwewwwewwwewwwepweho",
+   "obwwwwwwwwwwwwwwwwwwweho",
+   "obwpewwwewwwewwwewwpeeho",
+   "obwpwwwwwwwwwwwwwwwpweho",
+   "obewwwewwwewwwewwwewweho",
+   "obwpppwppwppwppwppwpweho",
+   "obwwewwwewwwewwwewwweeho",
+   ".oeeeeeeeeeeeeeeeeeeeeo.",
+   ".oohhhhhhhhhhhhhhhhhhoo.",
+   "...oooooooooooooooooo..."
+  ],
+  "aro": [
+   "..........oo..........",
+   "......ooookkoooo......",
+   ".....ookkkkkkmmoo.....",
+   "....okkkkkkkmmmmmo....",
+   "...okkkoooooooommmo...",
+   "..okkkoo......oommmo..",
+   ".ookko..........ommoo.",
+   ".okkoo..........oommo.",
+   ".okko............ommo.",
+   ".okko............omco.",
+   "okkko............occco",
+   "okkko............occno",
+   ".okmo............occo.",
+   ".ommo............ocno.",
+   ".ommoo..........oocno.",
+   ".oommo..........ocnoo.",
+   "..ommmoo......ooccno..",
+   "...ommmooooooooccno...",
+   "....ommmmmcccccnno....",
+   ".....oommccccnnoo.....",
+   "......oooocnoooo......",
+   "..........oo.........."
+  ],
+  "corazonLleno": [
+   ".oo...oo.",
+   "opbo.olro",
+   "ollpoplro",
+   "oppppppro",
+   ".opprrro.",
+   "..oprro..",
+   "...oro...",
+   "....o...."
+  ],
+  "corazonVacio": [
+   ".oo...oo.",
+   "ovvo.ovso",
+   "ovvvovvso",
+   "ovvvvvvso",
+   ".ovvssso.",
+   "..ovsso..",
+   "...oso...",
+   "....o...."
+  ],
+  "doblez": [
+   "oooooooo",
+   ".ohhhhho",
+   "..oeeeho",
+   "...oeeho",
+   "....oeho",
+   ".....oho",
+   "......oo",
+   ".......o"
+  ],
+  "huella": [
+   "..q..q..",
+   ".qq..qq.",
+   "q......q",
+   "qq.qq.qq",
+   "..qqqq..",
+   ".qqqqqq.",
+   ".qqqqqq.",
+   "..q..q.."
+  ],
+  "florecita": [
+   "...ff...",
+   "..fllf..",
+   ".fffyfff",
+   "fllyyylf",
+   ".fffyfff",
+   "..fllf..",
+   "...ff...",
+   "........"
+  ],
+  "hojita": [
+   "......aa",
+   "....aaza",
+   "...aaz.a",
+   "..aaz.aa",
+   ".aza.aa.",
+   ".z.aaa..",
+   "z.......",
+   "........"
+  ]
+ }
+}

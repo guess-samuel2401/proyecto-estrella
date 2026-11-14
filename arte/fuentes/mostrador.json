@@ -1,0 +1,467 @@
+{
+ "nombre": "mostrador",
+ "descripcion": "Panel de la tiendecita (lo genera arte/generar-mostrador.py; no editar a mano).",
+ "colores": {
+  "o": "#4A3347",
+  "a": "#F3D6AE",
+  "b": "#FCE9CC",
+  "c": "#E6C094",
+  "d": "#D4A577",
+  "e": "#B98A6E",
+  "k": "#EBCB9F",
+  "l": "#F6DFBC",
+  "m": "#D9B07E",
+  "n": "#C99A6A",
+  "w": "#FFF4E0",
+  "x": "#FFFBF3",
+  "y": "#F2DFD0",
+  "f": "#F28CA0",
+  "g": "#F7C6D0",
+  "h": "#FFE3EA",
+  "r": "#E0607E",
+  "u": "#FFE08A",
+  "v": "#FFF1B8",
+  "z": "#E8B84F",
+  "1": "#C4EADC",
+  "2": "#9ED1BE",
+  "3": "#FFD3DC",
+  "4": "#F2AEBE",
+  "5": "#FFEDB0",
+  "6": "#F2D27E",
+  "7": "#E3D6F2",
+  "8": "#C5B4E3",
+  "p": "#E89AAE",
+  "s": "#E8A85C"
+ },
+ "animaciones": {
+  "madera": {
+   "fps": 0,
+   "cuadros": [
+    "madera"
+   ]
+  },
+  "toldo": {
+   "fps": 0,
+   "cuadros": [
+    "toldo"
+   ]
+  },
+  "kraft": {
+   "fps": 0,
+   "cuadros": [
+    "kraft"
+   ]
+  },
+  "hilo": {
+   "fps": 0,
+   "cuadros": [
+    "hilo"
+   ]
+  },
+  "cuerda": {
+   "fps": 0,
+   "cuadros": [
+    "cuerda"
+   ]
+  },
+  "bocadillo": {
+   "fps": 0,
+   "cuadros": [
+    "bocadillo"
+   ]
+  },
+  "pico": {
+   "fps": 0,
+   "cuadros": [
+    "pico"
+   ]
+  },
+  "marco": {
+   "fps": 0,
+   "cuadros": [
+    "marco"
+   ]
+  },
+  "bolsita": {
+   "fps": 0,
+   "cuadros": [
+    "bolsita"
+   ]
+  },
+  "concha": {
+   "fps": 0,
+   "cuadros": [
+    "concha"
+   ]
+  },
+  "discos": {
+   "fps": 0,
+   "cuadros": [
+    "discoMenta",
+    "discoRosa",
+    "discoMantequilla",
+    "discoLila"
+   ]
+  },
+  "letrero": {
+   "fps": 0,
+   "cuadros": [
+    "letreroMadera"
+   ]
+  },
+  "letreroElegido": {
+   "fps": 0,
+   "cuadros": [
+    "letreroPintado"
+   ]
+  }
+ },
+ "cuadros": {
+  "madera": [
+   "..oooooooooooooooooooo..",
+   ".obbbbbbbbbbbbbbbbbbbdo.",
+   "obaaaaaaaacaaaaaaaaaadeo",
+   "obaabaaaaaaaaaacaabaadeo",
+   "obaaedaaacaaaaaaaaedcdeo",
+   "obacaaaaaaaaaacaaaaaadeo",
+   "obaaaaaaaaaaaaaaaaaaadeo",
+   "obcccccccccccccccccccdeo",
+   "obaaaaaaaaaaaaaaaaaaadeo",
+   "obaaaaaaaaaacaaaaaaaadeo",
+   "obaaaacaaaaaaaaaacaaadeo",
+   "obaaaaaaaaacaaaaaaaaadeo",
+   "obaaacaaaaaaaaaacaaaadeo",
+   "obaaaaaaaacaaaaaaaaaadeo",
+   "obaaaaaaaaaaaaaaaaaaadeo",
+   "obcccccccccccccccccccdeo",
+   "obaaaaaaaaaaaaaaaaaaadeo",
+   "obaabaaacaaaaaaaaabcadeo",
+   "obcaedaaaaaaacaaaaedadeo",
+   "obaaaaacaaaaaaaaaacaadeo",
+   "obaaaaaaaaaacaaaaaaaadeo",
+   "odddddddddddddddddddddeo",
+   ".oeeeeeeeeeeeeeeeeeeeeo.",
+   "..oooooooooooooooooooo.."
+  ],
+  "toldo": [
+   "oooooooooooooooo",
+   "ogggggggxxxxxxxo",
+   "offfffffwwwwwwwo",
+   "offfffffwwwwwwwo",
+   "offfffffwwwwwwwo",
+   "offfffffwwwwwwwo",
+   "offfffffwwwwwwwo",
+   "offfffffwwwwwwwo",
+   "offfffffwwwwwwwo",
+   "offfffffwwwwwwwo",
+   "orffffrfwywwwwyo",
+   "orffffrfwywwwwyo",
+   "orffffrfwywwwwyo",
+   "orffffrfwywwwwyo",
+   "orrrrrrooyyyyyyo",
+   ".orrrro..oyyyyo.",
+   "..oooo....oooo..",
+   "................"
+  ],
+  "kraft": [
+   "....oooooooooooooooo....",
+   "...ollllllllllllllllo...",
+   "..okkkkkkkkkkkkkkkkkko..",
+   ".okkkkkmkkkkkkkkkkkkkmo.",
+   "olkkkkkkkkkkkkkkkkkkkmno",
+   "olkkkkkkkkkkkkkkkmkkkmno",
+   "olkkkkkkkmkmkmmkkkkkkmno",
+   "olkkkkkkkkkkkkkkkkkkkmno",
+   "olkkkkkkkkkkkmkkkmkkkmno",
+   "olkkkkkkkkkkkkkmkkkkkmno",
+   "olkkkkkkkkkkkkkkkmkkkmno",
+   "olkkkkmkkkkkkkkkkkkkkmno",
+   "olmmkkkkkkkkkkkkkkmkkmno",
+   "olkkkkkkmkkkkkkkmkkkkmno",
+   "olkkkmkkkkkkkkkkkkkkkmno",
+   "olkmkkkkkkkkkkkkmmkkkmno",
+   "olmkkkkkkkkkkkkkkkkkkmno",
+   "olkkmkkkkkmkkkkkkkkkkmno",
+   "olkkkmkkkkkmkkkkkkkkkmno",
+   "olkkkkkkkkkkkkkkkkkkkmno",
+   "olkkkkkmkkkkkkkkkkkkkmno",
+   "ommmmmmmmmmmmmmmmmmmmmno",
+   "onnnnnnnnnnnnnnnnnnnnnno",
+   ".oooooooooooooooooooooo."
+  ],
+  "hilo": [
+   "..o......o..",
+   ".oro....oro.",
+   "..oxo..oxo..",
+   "...oro.ro...",
+   "....oxrxo...",
+   "....olllo...",
+   "...olooolo..",
+   "...olo.olo..",
+   "...olooolo..",
+   "....olllo..."
+  ],
+  "discoMenta": [
+   ".........oo.........",
+   "......oooxxooo......",
+   "....ooxx1111xxoo....",
+   "...oxx1111111111o...",
+   "..oxx111111111111o..",
+   "..ox1111111111111o..",
+   ".oxx11111111111111o.",
+   ".ox111111111111111o.",
+   ".ox111111111111111o.",
+   "oxx1111111111111111o",
+   "oxx1111111111111111o",
+   ".oxx11111111111111o.",
+   ".o2x11111111111112o.",
+   ".o2111111111111112o.",
+   "..o21111111111112o..",
+   "..o22222222222222o..",
+   "...o222222222222o...",
+   "....oo22222222oo....",
+   "......ooo22ooo......",
+   ".........oo........."
+  ],
+  "discoRosa": [
+   ".........oo.........",
+   "......oooxxooo......",
+   "....ooxx3333xxoo....",
+   "...oxx3333333333o...",
+   "..oxx333333333333o..",
+   "..ox3333333333333o..",
+   ".oxx33333333333333o.",
+   ".ox333333333333333o.",
+   ".ox333333333333333o.",
+   "oxx3333333333333333o",
+   "oxx3333333333333333o",
+   ".oxx33333333333333o.",
+   ".o4x33333333333334o.",
+   ".o4333333333333334o.",
+   "..o43333333333334o..",
+   "..o44444444444444o..",
+   "...o444444444444o...",
+   "....oo44444444oo....",
+   "......ooo44ooo......",
+   ".........oo........."
+  ],
+  "discoMantequilla": [
+   ".........oo.........",
+   "......oooxxooo......",
+   "....ooxx5555xxoo....",
+   "...oxx5555555555o...",
+   "..oxx555555555555o..",
+   "..ox5555555555555o..",
+   ".oxx55555555555555o.",
+   ".ox555555555555555o.",
+   ".ox555555555555555o.",
+   "oxx5555555555555555o",
+   "oxx5555555555555555o",
+   ".oxx55555555555555o.",
+   ".o6x55555555555556o.",
+   ".o6555555555555556o.",
+   "..o65555555555556o..",
+   "..o66666666666666o..",
+   "...o666666666666o...",
+   "....oo66666666oo....",
+   "......ooo66ooo......",
+   ".........oo........."
+  ],
+  "discoLila": [
+   ".........oo.........",
+   "......oooxxooo......",
+   "....ooxx7777xxoo....",
+   "...oxx7777777777o...",
+   "..oxx777777777777o..",
+   "..ox7777777777777o..",
+   ".oxx77777777777777o.",
+   ".ox777777777777777o.",
+   ".ox777777777777777o.",
+   "oxx7777777777777777o",
+   "oxx7777777777777777o",
+   ".oxx77777777777777o.",
+   ".o8x77777777777778o.",
+   ".o8777777777777778o.",
+   "..o87777777777778o..",
+   "..o88888888888888o..",
+   "...o888888888888o...",
+   "....oo88888888oo....",
+   "......ooo88ooo......",
+   ".........oo........."
+  ],
+  "letreroMadera": [
+   "..oooooooooooo..",
+   ".obbbbbbbbbbbbo.",
+   "obccccccccccccco",
+   "obceccccccccecco",
+   "obccccccccccccco",
+   "obccccccccccccco",
+   "obccccccccccccco",
+   "obccccccccccccco",
+   "obccccccccccccco",
+   "obccccccccccccco",
+   "obccccccccccccco",
+   "obccccccccccccco",
+   "obccccccccccccco",
+   "oddddddddddddddo",
+   ".oddddddddddddo.",
+   "..oooooooooooo.."
+  ],
+  "letreroPintado": [
+   "..oooooooooooo..",
+   ".ovvvvvvvvvvvvo.",
+   "ovuuuuuuuuuuuuuo",
+   "ovueuuuuuuuueuuo",
+   "ovuuuuuuuuuuuuuo",
+   "ovuuuuuuuuuuuuuo",
+   "ovuuuuuuuuuuuuuo",
+   "ovuuuuuuuuuuuuuo",
+   "ovuuuuuuuuuuuuuo",
+   "ovuuuuuuuuuuuuuo",
+   "ovuuuuuuuuuuuuuo",
+   "ovuuuuuuuuuuuuuo",
+   "ovuuuuuuuuuuuuuo",
+   "ozzzzzzzzzzzzzzo",
+   ".ozzzzzzzzzzzzo.",
+   "..oooooooooooo.."
+  ],
+  "cuerda": [
+   ".dc.",
+   ".cd.",
+   ".dc.",
+   ".cb.",
+   ".dc.",
+   ".cd.",
+   ".dc.",
+   ".bc."
+  ],
+  "bocadillo": [
+   "....oooooooooooooooo....",
+   "..oowwwwwwwwwwwwwwwwoo..",
+   ".owwwwwwwwwwwwwwwwwwwwo.",
+   ".owwwwwwwwwwwwwwwwwwwwo.",
+   "owwwwwwwwwwwwwwwwwwwwwwo",
+   "owwwwwwwwwwwwwwwwwwwwwwo",
+   "owwwwwwwwwwwwwwwwwwwwwwo",
+   "owwwwwwwwwwwwwwwwwwwwwwo",
+   "owwwwwwwwwwwwwwwwwwwwwwo",
+   "owwwwwwwwwwwwwwwwwwwwwwo",
+   "owwwwwwwwwwwwwwwwwwwwwwo",
+   "owwwwwwwwwwwwwwwwwwwwwwo",
+   "owwwwwwwwwwwwwwwwwwwwwwo",
+   "owwwwwwwwwwwwwwwwwwwwwwo",
+   "owwwwwwwwwwwwwwwwwwwwwwo",
+   "owwwwwwwwwwwwwwwwwwwwwwo",
+   "owwwwwwwwwwwwwwwwwwwwwwo",
+   "owwwwwwwwwwwwwwwwwwwwwwo",
+   "owwwwwwwwwwwwwwwwwwwwwwo",
+   "owwwwwwwwwwwwwwwwwwwwwwo",
+   ".owwwwwwwwwwwwwwwwwwwwo.",
+   ".oyyyyyyyyyyyyyyyyyyyyo.",
+   "..ooyyyyyyyyyyyyyyyyoo..",
+   "....oooooooooooooooo...."
+  ],
+  "pico": [
+   "......oooo",
+   ".....owwww",
+   "....owwwww",
+   "...owwwwww",
+   "..owwwwwww",
+   "oowwwwwwww",
+   "..oowwwwww",
+   "....oowwww",
+   "......oooo",
+   ".........."
+  ],
+  "marco": [
+   "..........................oooo..........................",
+   "....................oooooobbbboooooo....................",
+   ".................ooobbbbbbbbbbbbbbbbooo.................",
+   "...............ooobbbbbcccccbbbbcbbbaaooo...............",
+   "..............oobbbbbbbbbbbbbbbbbbbcaaaaoo..............",
+   "............oobbbccbbbboooooooooobaaaaaaaaoo............",
+   "...........obbbcbbbbooo..........oooaaaacaaao...........",
+   "..........obbbbbbboo................ooaaacaaao..........",
+   "........oobbbbbboo....................ooaaacaaoo........",
+   "........obbcbboo........................ooaaaaao........",
+   ".......obbcbboo..........................ooaaaaao.......",
+   "......obbcbbo..............................oaaaaao......",
+   ".....obbbbbo................................oaacaao.....",
+   ".....obbbbo..................................oaaaao.....",
+   "....obbbboo..................................ooacaao....",
+   "...oobbbbo....................................oaaaaoo...",
+   "...obbbbo......................................oaaaao...",
+   "..oobcbbo......................................oaaaaoo..",
+   "..obbcbo........................................oaaaao..",
+   "..obcbbo........................................oaacao..",
+   ".obbbbo..........................................oacddo.",
+   ".obbbbo..........................................oadddo.",
+   ".obbbbo..........................................oddddo.",
+   ".obbbo............................................odddo.",
+   ".obcbo............................................odddo.",
+   ".obcbo............................................oddeo.",
+   "obbcbo............................................odddeo",
+   "obbcbo............................................odddeo",
+   "obbbbo............................................odcdeo",
+   "obbbbo............................................odcdeo",
+   ".obbbo............................................odceo.",
+   ".obbbo............................................odceo.",
+   ".obcbo............................................oddeo.",
+   ".obbbbo..........................................odddeo.",
+   ".obbbao..........................................odddeo.",
+   ".obbcao..........................................oddeeo.",
+   "..oacaao........................................odddeo..",
+   "..oaaaao........................................odcdeo..",
+   "..ooaaaao......................................oddceoo..",
+   "...oaaaao......................................odddeo...",
+   "...ooacaao....................................odddeoo...",
+   "....oaacaoo..................................oodddeo....",
+   ".....oaaaao..................................odddeo.....",
+   ".....oaacaao................................odddeeo.....",
+   "......oaaaaao..............................oddcdeo......",
+   ".......oaaaaaoo..........................ooddcdeo.......",
+   "........oaaaaaoo........................ooddcdeo........",
+   "........ooaacaaaoo....................oodddddeoo........",
+   "..........oaaacaaaoo................oodddddeeo..........",
+   "...........oaaacaaaaooo..........oooddddddeeo...........",
+   "............ooaaaaaaaadooooooooooddddccdeeoo............",
+   "..............ooaaaccdddddddddddddddddeeoo..............",
+   "...............oooaadddcddddccccdddeeeooo...............",
+   ".................ooodddddeddddeeeeeeooo.................",
+   "....................ooooooeeeeoooooo....................",
+   "..........................oooo.........................."
+  ],
+  "bolsita": [
+   "....................",
+   "......o.o..o.o......",
+   ".....ogoghhgogo.....",
+   "......ogggggpo......",
+   ".......osssso.......",
+   "......ossoosso......",
+   ".....oggghggggo.....",
+   "....oggghhgggpgo....",
+   "...ogghhggggggppo...",
+   "..ogghgggggggggppo..",
+   "..oghgggggggggggpo..",
+   ".ogghgggfgfgggggppo.",
+   ".oghgggfffffggggppo.",
+   ".oggggggfffgggggppo.",
+   ".ogggggggfggggggppo.",
+   ".ogggggggggggggggpo.",
+   "..oggggggggggggppo..",
+   "..oppgggggggggpppo..",
+   "...ooppppppppppoo...",
+   ".....oooooooooo....."
+  ],
+  "concha": [
+   "..ooooo..",
+   ".ohhfhho.",
+   "ohfhfhfho",
+   "ofhfhfhfo",
+   "ohfhfhfho",
+   ".oofffoo.",
+   "...ofo...",
+   "...ooo..."
+  ]
+ }
+}

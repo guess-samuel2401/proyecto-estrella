@@ -1,0 +1,98 @@
+{
+ "nombre": "iconos_ropa",
+ "descripcion": "Iconos de las prendas (lo genera arte/generar-iconos.py; no editar a mano). La lana (q, s, l, h) la tine el juego.",
+ "colores": {
+  "q": "#8E3B5A",
+  "s": "#D9607E",
+  "l": "#F59AB0",
+  "h": "#FFC4CF",
+  "a": "#FFF4E0",
+  "b": "#B89A8E",
+  "c": "#8A6A6A",
+  "d": "#FFFFFF",
+  "e": "#E8D2C2"
+ },
+ "capas": {
+  "lana": [
+   "q",
+   "s",
+   "l",
+   "h"
+  ],
+  "sombra": [
+   "s"
+  ],
+  "luz": [
+   "h"
+  ],
+  "borde": [
+   "q"
+  ]
+ },
+ "animaciones": {
+  "tiles": {
+   "fps": 0,
+   "cuadros": [
+    "bufanda",
+    "gorro",
+    "lazo"
+   ]
+  }
+ },
+ "cuadros": {
+  "bufanda": [
+   "................",
+   "................",
+   "....sssssssq....",
+   "..sshlllllllq...",
+   ".shllqqqqqlllq..",
+   ".sllq.....shllq.",
+   ".slq.....sssslq.",
+   ".sllq....slssq..",
+   ".qlllsssssllsq..",
+   "..qqlllllsllq...",
+   "....qqqqqsaaq...",
+   ".........shlq...",
+   ".........qhlq...",
+   "..........saq...",
+   "..........qqq...",
+   "..........q.q..."
+  ],
+  "gorro": [
+   "................",
+   "........bbc.....",
+   "........bdac....",
+   ".......sbaec....",
+   "....ssshbbbq....",
+   "...shhhhllssq...",
+   "..shshhshhsllq..",
+   "..shhhhhhlllsq..",
+   ".shhhhhhllllssq.",
+   ".shsssssssssssq.",
+   ".sshshshshslslq.",
+   ".sslslslslslsqq.",
+   ".qqqqqqqqqqqq...",
+   "................",
+   "................",
+   "................"
+  ],
+  "lazo": [
+   "................",
+   "................",
+   "................",
+   "................",
+   "...ssq...sssq...",
+   "..shhhsqshhhlsq.",
+   ".shhhllsslhsslq.",
+   ".shsslshlsslssq.",
+   ".qllsssssssqqqq.",
+   "..qqqslsssq.....",
+   ".....ssqqlq.....",
+   ".....sq..slq....",
+   "....slq..qlq....",
+   "....slq...qlq...",
+   "....qq.....qq...",
+   "................"
+  ]
+ }
+}

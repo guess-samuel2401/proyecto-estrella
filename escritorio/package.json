@@ -1,0 +1,40 @@
+{
+  "name": "proyecto-estrella",
+  "productName": "Proyecto Estrella",
+  "version": "1.0.0",
+  "description": "Juego cozy de una gatita que cultiva, pesca, teje y decora",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "preparar": "node preparar.js",
+    "probar": "node preparar.js && electron .",
+    "exe": "node preparar.js && electron-builder --win portable --x64"
+  },
+  "build": {
+    "appId": "estrella.juego.cozy",
+    "productName": "Proyecto Estrella",
+    "files": [
+      "main.js",
+      "preload.js",
+      "icono.png",
+      "app/**/*"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "portable",
+      "icon": "icono.png"
+    },
+    "portable": {
+      "artifactName": "Proyecto Estrella.exe"
+    }
+  },
+  "devDependencies": {
+    "electron": "33.2.1",
+    "electron-builder": "25.1.8"
+  },
+  "allowScripts": {
+    "electron@33.2.1": true
+  }
+}

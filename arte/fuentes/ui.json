@@ -1,0 +1,413 @@
+{
+  "nombre": "ui",
+  "descripcion": "Materiales de la interfaz (los genera arte/generar-ui.py; no editar a mano). Marcos 9-slice de 24x24 (corte 8) y de 12x12 (corte 4).",
+  "colores": {
+    "o": "#4A3347",
+    "f": "#FFE3EA",
+    "l": "#FFF3F6",
+    "d": "#EFCBD3",
+    "p": "#D98FA3",
+    "w": "#FFF4E0",
+    "b": "#FFFBF3",
+    "e": "#F2DFD0",
+    "m": "#F0C08A",
+    "k": "#D99A5B",
+    "h": "#B9806E",
+    "v": "#E6A8D7",
+    "g": "#F2C6E7",
+    "n": "#CC8DBF",
+    "i": "#FFE3EA",
+    "u": "#FFD3B0",
+    "a": "#FFE6CF",
+    "z": "#E8A85C",
+    "q": "#C5B4E3",
+    "c": "#DDD1F0",
+    "j": "#9F8BC9",
+    "y": "#FFE08A",
+    "x": "#FFF0BF",
+    "r": "#F7C873",
+    "s": "#E3BFC6"
+  },
+  "animaciones": {
+    "fieltro": {
+      "fps": 0,
+      "cuadros": [
+        "fieltro"
+      ]
+    },
+    "papel": {
+      "fps": 0,
+      "cuadros": [
+        "papel"
+      ]
+    },
+    "tapa": {
+      "fps": 0,
+      "cuadros": [
+        "tapa"
+      ]
+    },
+    "mimbre": {
+      "fps": 0,
+      "cuadros": [
+        "mimbre"
+      ]
+    },
+    "pestanaRosa": {
+      "fps": 0,
+      "cuadros": [
+        "pestanaRosa"
+      ]
+    },
+    "pestanaDurazno": {
+      "fps": 0,
+      "cuadros": [
+        "pestanaDurazno"
+      ]
+    },
+    "pestanaLavanda": {
+      "fps": 0,
+      "cuadros": [
+        "pestanaLavanda"
+      ]
+    },
+    "pestanaMantequilla": {
+      "fps": 0,
+      "cuadros": [
+        "pestanaMantequilla"
+      ]
+    },
+    "botonRosa": {
+      "fps": 0,
+      "cuadros": [
+        "botonRosa"
+      ]
+    },
+    "botonMantequilla": {
+      "fps": 0,
+      "cuadros": [
+        "botonMantequilla"
+      ]
+    },
+    "botonPapel": {
+      "fps": 0,
+      "cuadros": [
+        "botonPapel"
+      ]
+    },
+    "hud": {
+      "fps": 0,
+      "cuadros": [
+        "hud"
+      ]
+    },
+    "cinta": {
+      "fps": 0,
+      "cuadros": [
+        "cinta"
+      ]
+    },
+    "sello": {
+      "fps": 0,
+      "cuadros": [
+        "sello"
+      ]
+    }
+  },
+  "cuadros": {
+    "fieltro": [
+      "...oooooooooooooooooo...",
+      ".oolllllllllllllllllloo.",
+      ".olfffffffffffffffffflo.",
+      "olffppffppffppffppffffdo",
+      "olfpffffffffffffffffpfdo",
+      "olfpffffffffffffffffpfdo",
+      "olffffffffffffffffffffdo",
+      "olffffffffffffffffffffdo",
+      "olfpffffffffffffffffpfdo",
+      "olfpffffffffffffffffpfdo",
+      "olffffffffffffffffffffdo",
+      "olffffffffffffffffffffdo",
+      "olfpffffffffffffffffpfdo",
+      "olfpffffffffffffffffpfdo",
+      "olffffffffffffffffffffdo",
+      "olffffffffffffffffffffdo",
+      "olfpffffffffffffffffpfdo",
+      "olfpffffffffffffffffpfdo",
+      "olffffffffffffffffffffdo",
+      "olffppffppffppffppffffdo",
+      ".olffffffffffffffffffdo.",
+      ".ooddddddddddddddddddoo.",
+      "...oooooooooooooooooo...",
+      "...oooooooooooooooooo..."
+    ],
+    "papel": [
+      "..ooo.ooooooo.oooooooo..",
+      ".obbbobbbbbbbobbbbbbbbo.",
+      "obwwwbwwwwwwwbwwwwwwwwbo",
+      "obwwwwwwwwwwwwwwwwwwwweo",
+      "obwwwwwwwwwwwwwwwwwwwweo",
+      "obwwwwwwwwwwwwwwwwwwwweo",
+      "obwwwwwwwwwwwwwwwwwwwweo",
+      "obwwwwwwwwwwwwwwwwwwwweo",
+      ".obwwwwwwwwwwwwwwwwwwweo",
+      "obwwwwwwwwwwwwwwwwwwwweo",
+      "obwwwwwwwwwwwwwwwwwwwweo",
+      "obwwwwwwwwwwwwwwwwwwwweo",
+      "obwwwwwwwwwwwwwwwwwwwweo",
+      "obwwwwwwwwwwwwwwwwwwwweo",
+      "obwwwwwwwwwwwwwwwwwwwweo",
+      "obwwwwwwwwwwwwwwwwwwwweo",
+      ".obwwwwwwwwwwwwwwwwwwweo",
+      "obwwwwwwwwwwwwwwwwwwwweo",
+      "obwwwwwwwwwwwwwwwwwwwweo",
+      "obwwwwwwwwwwwwwwwwwwwweo",
+      "obwwwwwwwwwwwwwwwwwwwweo",
+      ".obeeeeeeeeeeeeeeeeeeeo.",
+      "..oooooooooooooooooooo..",
+      "..oooooooooooooooooooo.."
+    ],
+    "tapa": [
+      "...oooooooooooooooooo...",
+      ".ooggggggggggggggggggoo.",
+      ".ogvvvvvvvvvvvvvvvvvvgo.",
+      "ogvviivviivviivviivvvvno",
+      "ogvivvvvvvvvvvvvvvvvivno",
+      "ogvivvvvvvvvvvvvvvvvivno",
+      "ogvvvvvvvvvvvvvvvvvvvvno",
+      "ogvvvvvvvvvvvvvvvvvvvvno",
+      "ogvivvvvvvvvvvvvvvvvivno",
+      "ogvivvvvvvvvvvvvvvvvivno",
+      "ogvvvvvvvvvvvvvvvvvvvvno",
+      "ogvvvvvvvvvvvvvvvvvvvvno",
+      "ogvivvvvvvvvvvvvvvvvivno",
+      "ogvivvvvvvvvvvvvvvvvivno",
+      "ogvvvvvvvvvvvvvvvvvvvvno",
+      "ogvvvvvvvvvvvvvvvvvvvvno",
+      "ogvivvvvvvvvvvvvvvvvivno",
+      "ogvivvvvvvvvvvvvvvvvivno",
+      "ogvvvvvvvvvvvvvvvvvvvvno",
+      "ogvviivviivviivviivvvvno",
+      ".ogvvvvvvvvvvvvvvvvvvno.",
+      ".oonnnnnnnnnnnnnnnnnnoo.",
+      "...oooooooooooooooooo...",
+      "...oooooooooooooooooo..."
+    ],
+    "mimbre": [
+      "....oooooooooooooooo....",
+      "..oommkkmmkkmmkkmmkkoo..",
+      ".ommkkmmkkmmkkmmkkmmkko.",
+      ".ommkkhhhhhhhhhhhhmmkko.",
+      "omkkmmkkmmkkmmkkmmkkmmko",
+      "omkkmmkkmmkkmmkkmmkkmmko",
+      "okmhkkoooooooooooomhkkmo",
+      "okmhkkowwwwwwwwwwomhkkmo",
+      "omkhmmowwwwwwwwwwokhmmko",
+      "omkhmmowwwwwwwwwwokhmmko",
+      "okmhkkowwwwwwwwwwomhkkmo",
+      "okmhkkowwwwwwwwwwomhkkmo",
+      "omkhmmowwwwwwwwwwokhmmko",
+      "omkhmmowwwwwwwwwwokhmmko",
+      "okmhkkowwwwwwwwwwomhkkmo",
+      "okmhkkowwwwwwwwwwomhkkmo",
+      "omkhmmooooooooooookhmmko",
+      "omkkmmkkmmkkmmkkmmkkmmko",
+      "okmmkkmmkkmmkkmmkkmmkkmo",
+      ".ommkkhhhhhhhhhhhhmmkko.",
+      ".okkmmkkmmkkmmkkmmkkmmo.",
+      "..oommkkmmkkmmkkmmkkoo..",
+      "....oooooooooooooooo....",
+      "....oooooooooooooooo...."
+    ],
+    "pestanaRosa": [
+      "...oooooooooooooooooo...",
+      ".oolllllllllllllllllloo.",
+      ".olfffffffffffffffffflo.",
+      "olffppffppffppffppffffdo",
+      "olfpffffffffffffffffpfdo",
+      "olfpffffffffffffffffpfdo",
+      "olffffffffffffffffffffdo",
+      "olffffffffffffffffffffdo",
+      "olfpffffffffffffffffpfdo",
+      "olfpffffffffffffffffpfdo",
+      "olffffffffffffffffffffdo",
+      "olffffffffffffffffffffdo",
+      "olfpffffffffffffffffpfdo",
+      "olfpffffffffffffffffpfdo",
+      "olffffffffffffffffffffdo",
+      "olffffffffffffffffffffdo",
+      "olfpffffffffffffffffpfdo",
+      "olfpffffffffffffffffpfdo",
+      "olffffffffffffffffffffdo",
+      "olffppffppffppffppffffdo",
+      ".olffffffffffffffffffdo.",
+      ".ooddddddddddddddddddoo.",
+      "...oooooooooooooooooo...",
+      "...oooooooooooooooooo..."
+    ],
+    "pestanaDurazno": [
+      "...oooooooooooooooooo...",
+      ".ooaaaaaaaaaaaaaaaaaaoo.",
+      ".oauuuuuuuuuuuuuuuuuuao.",
+      "oauuzzuuzzuuzzuuzzuuuuzo",
+      "oauzuuuuuuuuuuuuuuuuzuzo",
+      "oauzuuuuuuuuuuuuuuuuzuzo",
+      "oauuuuuuuuuuuuuuuuuuuuzo",
+      "oauuuuuuuuuuuuuuuuuuuuzo",
+      "oauzuuuuuuuuuuuuuuuuzuzo",
+      "oauzuuuuuuuuuuuuuuuuzuzo",
+      "oauuuuuuuuuuuuuuuuuuuuzo",
+      "oauuuuuuuuuuuuuuuuuuuuzo",
+      "oauzuuuuuuuuuuuuuuuuzuzo",
+      "oauzuuuuuuuuuuuuuuuuzuzo",
+      "oauuuuuuuuuuuuuuuuuuuuzo",
+      "oauuuuuuuuuuuuuuuuuuuuzo",
+      "oauzuuuuuuuuuuuuuuuuzuzo",
+      "oauzuuuuuuuuuuuuuuuuzuzo",
+      "oauuuuuuuuuuuuuuuuuuuuzo",
+      "oauuzzuuzzuuzzuuzzuuuuzo",
+      ".oauuuuuuuuuuuuuuuuuuzo.",
+      ".oozzzzzzzzzzzzzzzzzzoo.",
+      "...oooooooooooooooooo...",
+      "...oooooooooooooooooo..."
+    ],
+    "pestanaLavanda": [
+      "...oooooooooooooooooo...",
+      ".ooccccccccccccccccccoo.",
+      ".ocqqqqqqqqqqqqqqqqqqco.",
+      "ocqqjjqqjjqqjjqqjjqqqqjo",
+      "ocqjqqqqqqqqqqqqqqqqjqjo",
+      "ocqjqqqqqqqqqqqqqqqqjqjo",
+      "ocqqqqqqqqqqqqqqqqqqqqjo",
+      "ocqqqqqqqqqqqqqqqqqqqqjo",
+      "ocqjqqqqqqqqqqqqqqqqjqjo",
+      "ocqjqqqqqqqqqqqqqqqqjqjo",
+      "ocqqqqqqqqqqqqqqqqqqqqjo",
+      "ocqqqqqqqqqqqqqqqqqqqqjo",
+      "ocqjqqqqqqqqqqqqqqqqjqjo",
+      "ocqjqqqqqqqqqqqqqqqqjqjo",
+      "ocqqqqqqqqqqqqqqqqqqqqjo",
+      "ocqqqqqqqqqqqqqqqqqqqqjo",
+      "ocqjqqqqqqqqqqqqqqqqjqjo",
+      "ocqjqqqqqqqqqqqqqqqqjqjo",
+      "ocqqqqqqqqqqqqqqqqqqqqjo",
+      "ocqqjjqqjjqqjjqqjjqqqqjo",
+      ".ocqqqqqqqqqqqqqqqqqqjo.",
+      ".oojjjjjjjjjjjjjjjjjjoo.",
+      "...oooooooooooooooooo...",
+      "...oooooooooooooooooo..."
+    ],
+    "pestanaMantequilla": [
+      "...oooooooooooooooooo...",
+      ".ooxxxxxxxxxxxxxxxxxxoo.",
+      ".oxyyyyyyyyyyyyyyyyyyxo.",
+      "oxyyzzyyzzyyzzyyzzyyyyro",
+      "oxyzyyyyyyyyyyyyyyyyzyro",
+      "oxyzyyyyyyyyyyyyyyyyzyro",
+      "oxyyyyyyyyyyyyyyyyyyyyro",
+      "oxyyyyyyyyyyyyyyyyyyyyro",
+      "oxyzyyyyyyyyyyyyyyyyzyro",
+      "oxyzyyyyyyyyyyyyyyyyzyro",
+      "oxyyyyyyyyyyyyyyyyyyyyro",
+      "oxyyyyyyyyyyyyyyyyyyyyro",
+      "oxyzyyyyyyyyyyyyyyyyzyro",
+      "oxyzyyyyyyyyyyyyyyyyzyro",
+      "oxyyyyyyyyyyyyyyyyyyyyro",
+      "oxyyyyyyyyyyyyyyyyyyyyro",
+      "oxyzyyyyyyyyyyyyyyyyzyro",
+      "oxyzyyyyyyyyyyyyyyyyzyro",
+      "oxyyyyyyyyyyyyyyyyyyyyro",
+      "oxyyzzyyzzyyzzyyzzyyyyro",
+      ".oxyyyyyyyyyyyyyyyyyyro.",
+      ".oorrrrrrrrrrrrrrrrrroo.",
+      "...oooooooooooooooooo...",
+      "...oooooooooooooooooo..."
+    ],
+    "botonRosa": [
+      "..oooooooo..",
+      ".ollllllllo.",
+      "olfffffffflo",
+      "olffffffffdo",
+      "olffffffffdo",
+      "olffffffffdo",
+      "olffffffffdo",
+      "olffffffffdo",
+      "olffffffffdo",
+      ".oldddddddo.",
+      "..oooooooo..",
+      "..oooooooo.."
+    ],
+    "botonMantequilla": [
+      "..oooooooo..",
+      ".oxxxxxxxxo.",
+      "oxyyyyyyyyxo",
+      "oxyyyyyyyyro",
+      "oxyyyyyyyyro",
+      "oxyyyyyyyyro",
+      "oxyyyyyyyyro",
+      "oxyyyyyyyyro",
+      "oxyyyyyyyyro",
+      ".oxrrrrrrro.",
+      "..oooooooo..",
+      "..oooooooo.."
+    ],
+    "botonPapel": [
+      "..oooooooo..",
+      ".obbbbbbbbo.",
+      "obwwwwwwwwbo",
+      "obwwwwwwwweo",
+      "obwwwwwwwweo",
+      "obwwwwwwwweo",
+      "obwwwwwwwweo",
+      "obwwwwwwwweo",
+      "obwwwwwwwweo",
+      ".obeeeeeeeo.",
+      "..oooooooo..",
+      "..oooooooo.."
+    ],
+    "hud": [
+      ".......oooooo.......",
+      ".....oolllllloo.....",
+      "...oollfffffflloo...",
+      "...olffpfpfpffffo...",
+      "..olfffffffffpfffo..",
+      ".ollfpffffffffffddo.",
+      ".olffffffffffffpfdo.",
+      ".olfpffffffffffffdo.",
+      "olffffffffffffffpfdo",
+      "olffffffffffffffffdo",
+      "olfpffffffffffffffdo",
+      ".olffffffffffffpfdo.",
+      ".olfpffffffffffffdo.",
+      ".ollffffffffffpfddo.",
+      "..olffpfffffffffdo..",
+      "...offffpfpfpffdo...",
+      "...ooddffffffddoo...",
+      ".....ooddddddoo.....",
+      ".......oooooo.......",
+      ".......oooooo......."
+    ],
+    "cinta": [
+      "rryyrryyrryyrry.",
+      ".yyrryyrryyrryyr",
+      "yyrryyrryyrryyr.",
+      ".rryyrryyrryyrry",
+      "rryyrryyrryyrry.",
+      ".yyrryyrryyrryyr"
+    ],
+    "sello": [
+      "w.w.w.w.w.w.",
+      ".wwwwwwwwwww",
+      "wwddddddddw.",
+      ".wdwwwwwwdww",
+      "wwdwwwwwwdw.",
+      ".wdwwwwwwdww",
+      "wwdwwwwwwdw.",
+      ".wdwwwwwwdww",
+      "wwdwwwwwwdw.",
+      ".wddddddddww",
+      "wwwwwwwwwww.",
+      ".w.w.w.w.w.w"
+    ]
+  }
+}

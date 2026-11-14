@@ -1,0 +1,142 @@
+{
+ "nombre": "libro",
+ "descripcion": "Libro de ayuda (lo genera arte/generar-libro.py; no editar a mano).",
+ "colores": {
+  "o": "#4A3347",
+  "c": "#C98F6B",
+  "k": "#DDA77F",
+  "d": "#A87358",
+  "n": "#8A5A44",
+  "w": "#FFF4E0",
+  "b": "#FFFBF3",
+  "e": "#F2DFD0",
+  "h": "#E3C9BC",
+  "g": "#C9AE9F",
+  "i": "#E6ECF5",
+  "m": "#A7B3C9",
+  "j": "#6E6A8C",
+  "p": "#F28CA0",
+  "l": "#FFB3C1",
+  "r": "#D9607E"
+ },
+ "animaciones": {
+  "tapa": {
+   "fps": 0,
+   "cuadros": [
+    "tapa"
+   ]
+  },
+  "tecla": {
+   "fps": 0,
+   "cuadros": [
+    "tecla"
+   ]
+  },
+  "anilla": {
+   "fps": 0,
+   "cuadros": [
+    "anilla"
+   ]
+  },
+  "cerrar": {
+   "fps": 0,
+   "cuadros": [
+    "cerrar"
+   ]
+  },
+  "clip": {
+   "fps": 0,
+   "cuadros": [
+    "clip"
+   ]
+  }
+ },
+ "cuadros": {
+  "tapa": [
+   "...oooooooooooooooooo...",
+   ".ookkkkkkkkkkkkkkkkkkoo.",
+   ".occdccccccccccdcccccdo.",
+   "okccwwdwwcwwcwwcwwcwcdno",
+   "okcwccccdccccccccccdwdno",
+   "okcwccccccdcccccccccwdno",
+   "okccccccccccdccccccccdno",
+   "okcwccccccccccdcccccwdno",
+   "okcwcdccccccccccdcccwdno",
+   "okcccccdccccccccccdccdno",
+   "okcwcccccdccccccccccwdno",
+   "okcwcccccccdccccccccwdno",
+   "okdccccccccccdcccccccdno",
+   "okcwdccccccccccdccccwdno",
+   "okcwccdccccccccccdccwdno",
+   "okccccccdccccccccccdcdno",
+   "okcwccccccdcccccccccwdno",
+   "okcwccccccccdcccccccwdno",
+   "okcdccccccccccdccccccdno",
+   "okcwwwcwwcwwcwwcwwcwwdno",
+   ".oddddddddddddddddddddo.",
+   ".oonnnnnnnnnnnnnnnnnnoo.",
+   "...oooooooooooooooooo...",
+   "...oooooooooooooooooo..."
+  ],
+  "tecla": [
+   "..oooooooo..",
+   ".obbbbbbbbo.",
+   "obwwwwwwwweo",
+   "obwwwwwwwweo",
+   "obwwwwwwwweo",
+   "obwwwwwwwweo",
+   "obwwwwwwwweo",
+   "obwwwwwwwweo",
+   "ohhhhhhhhhho",
+   ".oggggggggo.",
+   "..oooooooo..",
+   "..oooooooo.."
+  ],
+  "anilla": [
+   "....................",
+   ".oo..............oo.",
+   "oiio.oooooooooo.oiio",
+   "oiimoiiiiiiiiiimoimo",
+   "omjomjmmmmmmmmjomjjo",
+   ".oo..oooooooooo..oo.",
+   "....................",
+   "...................."
+  ],
+  "cerrar": [
+   ".......oo.......",
+   "....ooollooo....",
+   "...ollllllppo...",
+   "..ollppppppppo..",
+   ".ollppppppppppo.",
+   ".olppoppppoprpo.",
+   ".olpppwppwpprro.",
+   "ollppppwwpppprro",
+   "ollppppwwpppprro",
+   ".olpppwppwpprro.",
+   ".opppoppppoprro.",
+   ".oppppppppprrro.",
+   "..opprrpprrrro..",
+   "...opprrrrrro...",
+   "....ooorrooo....",
+   ".......oo......."
+  ],
+  "clip": [
+   "..oooo..",
+   ".oimmio.",
+   "oio..omo",
+   "oio..omo",
+   "oio.oimo",
+   "oiooimmo",
+   "oiooiomo",
+   "oiooiomo",
+   "oiooiomo",
+   "oioo.omo",
+   "oio..omo",
+   "oio..omo",
+   "oiooooio",
+   ".oimmio.",
+   "..oooo..",
+   "........"
+  ]
+ }
+}

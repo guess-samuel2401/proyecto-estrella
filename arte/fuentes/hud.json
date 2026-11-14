@@ -1,0 +1,122 @@
+{
+  "nombre": "hud",
+  "descripcion": "Iconos de 16x16 para los botones de arriba a la derecha: morral (bolsa), diario con huella (enciclopedia), ovillo con agujas (ajustes), saquito de semillas y sillon (decorar). Los dibuja arte/generar-ui.py.",
+  "colores": {
+    "o": "#4A3347",
+    "f": "#F7A6B4",
+    "l": "#FFE3EA",
+    "s": "#E87F86",
+    "y": "#FFE08A",
+    "v": "#E6A8D7",
+    "p": "#C98BBE",
+    "w": "#FFF4E0",
+    "k": "#FFD3B0",
+    "m": "#E8A85C",
+    "n": "#E8A85C",
+    "c": "#8A5A44"
+  },
+  "animaciones": {
+    "tiles": {
+      "fps": 0,
+      "cuadros": [
+        "bolsa",
+        "libro",
+        "ovillo",
+        "saquito",
+        "sillon"
+      ]
+    }
+  },
+  "cuadros": {
+    "bolsa": [
+      "................",
+      ".....oooooo.....",
+      "....oo....oo....",
+      "...oo......oo...",
+      "..oooooooooooo..",
+      ".ollllllllllllo.",
+      ".offffyyfyyfffo.",
+      ".offffyyyyyfffo.",
+      ".osffffyyyfffso.",
+      ".osfffffyffffso.",
+      ".oooooooooooooo.",
+      ".okkkkkkkkkkkmo.",
+      ".okkkkkkkkkkkmo.",
+      ".ommmmmmmmmmmmo.",
+      "..oooooooooooo..",
+      "................"
+    ],
+    "libro": [
+      "................",
+      "..ooooooooooo...",
+      "..opvvvvvvvvo...",
+      "..opvvvvvvvvo...",
+      "..opvvlvlvlvo...",
+      "..opvvvvvvvvo...",
+      "..opvvvlllvvo...",
+      "..opvvlllllvo...",
+      "..opvvvlllvvo...",
+      "..opvvvvvvvvo...",
+      "..opvvvvvvvvo...",
+      "..opwwwwwwwwo...",
+      "..ooooooooooo...",
+      "........oyo.....",
+      "........oyo.....",
+      ".........o......"
+    ],
+    "ovillo": [
+      "................",
+      "................",
+      "..n..........n..",
+      "...n........n...",
+      "....noooooon....",
+      "....ofssfffo....",
+      "...ofsfffsffo...",
+      "...ofsffsffso...",
+      "...osffsffsfo...",
+      "...offsffsffo...",
+      "...offffsffso...",
+      "...offfsffsfo...",
+      "...noffffsfon...",
+      "..n..oooooo..ns.",
+      ".y............y.",
+      "................"
+    ],
+    "saquito": [
+      "................",
+      ".....oooooo.....",
+      "....okcckcko....",
+      ".....okkkko.....",
+      "....osffffso....",
+      "...fokkkkkkof...",
+      "...okkkkkkkko...",
+      "..okkkkkkkkkko..",
+      "..okwwwwwwwwko..",
+      "..okwwfwwfwwko..",
+      "..okwwffffwwko..",
+      "..okwwwffwwwko..",
+      "..okkkkkkkkkko..",
+      "..ommkkkkkkmmo..",
+      "...ommmmmmmmo...",
+      "....oooooooo...."
+    ],
+    "sillon": [
+      "................",
+      "................",
+      "....oooooooo....",
+      "...offffffffo...",
+      "...ofllllllfo...",
+      "...oflsllslfo...",
+      ".oooflsssslfooo.",
+      "offfoflsslfofffo",
+      "offfofllllfofffo",
+      "offfoooooooofffo",
+      "offfowwwwwwofffo",
+      "offffffffffffffo",
+      "osssssssssssssso",
+      ".oooooooooooooo.",
+      "..om........mo..",
+      "..oo........oo.."
+    ]
+  }
+}

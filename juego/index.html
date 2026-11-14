@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proyecto Estrella</title>
+<style>
+  /* Fuente pixel propia (arte/letra.json -> arte/generar-fuente.py). El eme mide 12 pixeles de la letra:
+     se usa siempre a multiplos de 12px para que cada pixel caiga entero en la pantalla. */
+  @font-face { font-family: 'Estrella'; src: url(fuentes/estrella.ttf) format('truetype'); }
+  @font-face { font-family: 'Estrella Gordita'; src: url(fuentes/estrella-gordita.ttf) format('truetype'); }
+
+  /* Paleta de los menus: cremas y rosas claritos y apagados, un solo acento fuerte (Fresa) para lo elegido.
+     Nada de verdes ni azules: esos son del mundo. */
+  :root {
+    --ciruela: #4A3347; --tinta2: #8A6A86;
+    --papel: #FFF4E0; --papelSombra: #F2DFD0; --papelBrillo: #FFFBF3; --renglon: #F0D9D2;
+    --fieltro: #FFE3EA; --fresa: #F28CA0; --mantequilla: #FFE08A; --miel: #E8A85C;
+    --orquidea: #E6A8D7; --lavanda: #C5B4E3;
+    --fondo: #F6E6D6;
+  }
+  html, body { height: 100%; margin: 0; overflow: hidden; }
+  body {
+    background: var(--fondo); color: var(--ciruela);
+    font-family: 'Estrella', "Segoe UI", system-ui, sans-serif; font-size: 24px; line-height: 1.25;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    -webkit-font-smoothing: none; font-smooth: never;
+  }
+  button, input { font-family: inherit; }
+  b, h1, h2 { font-family: 'Estrella Gordita', 'Estrella', sans-serif; font-weight: normal; }
+  #marco { position: relative; display: flex; }
+  canvas#lienzo {
+    width: 100vw; height: 100vh; display: block;   /* toda la ventana, sin bordes: el ancho en pixeles lo pone medirLienzo() */
+    image-rendering: pixelated; background: #BFE3B4;
+  }
+
+  /* --px: un pixel del lienzo en pantalla (iconos del HUD). --u: un pixel de la letra y de los marcos
+     (entero, 2 o 3 px); --t: tamano del texto (12 pixeles de letra); --tc: texto compacto. Los pone ajustarEscala(). */
+  :root { --px: 3.33px; --u: 2px; --t: 24px; --tc: 12px; --uc: 1px; }
+  body { font-size: var(--t); }
+
+  /* ---------- Materiales (marcos 9-slice de arte/sprites/ui_*.png) ---------- */
+  .papel, .fieltro, .mimbre, .tapa, .capa {
+    border-style: solid; border-color: transparent; image-rendering: pixelated; background: none;
+    border-image-repeat: repeat; border-width: calc(8 * var(--u)); border-image-width: calc(8 * var(--u));
+  }
+  .papel { border-image-source: url(../arte/sprites/ui_papel.png); border-image-slice: 8 fill; }
+  .fieltro { border-image-source: url(../arte/sprites/ui_fieltro.png); border-image-slice: 8 fill; }
+  .mimbre { border-image-source: url(../arte/sprites/ui_mimbre.png); border-image-slice: 8 fill; }
+  .tapa { border-image-source: url(../arte/sprites/ui_tapa.png); border-image-slice: 8 fill; }
+  /* Botones y fichas pequenas: marcos de 12x12 cortados a 4 */
+  .boton, .cerrar, .grande, .ficha, .ajuste button, #ajustes .abajo button, .tarjeta, .aviso,
+  #cintaDecorar, #tarjetaDecorar, #nombre, #dialogoNombre {
+    border-style: solid; border-color: transparent; image-rendering: pixelated; background: none;
+    border-width: calc(4 * var(--u)); border-image-width: calc(4 * var(--u)); border-image-repeat: repeat;
+    border-image-source: url(../arte/sprites/ui_botonRosa.png); border-image-slice: 4 fill;
+    color: var(--ciruela); font-size: var(--t); line-height: 1.25; border-radius: 0;
+  }
+  .grande, .tarjeta.elegida, #nombre:focus { border-image-source: url(../arte/sprites/ui_botonMantequilla.png); }
+  .aviso, #cintaDecorar, #tarjetaDecorar, #nombre, .tarjeta.oculta { border-image-source: url(../arte/sprites/ui_botonPapel.png); }
+  button { cursor: pointer; }
+  .cerrar:hover, .grande.suave:hover, .ficha:hover, .ajuste button:hover, #ajustes .abajo button:hover, button.tarjeta:hover {
+    border-image-source: url(../arte/sprites/ui_botonMantequilla.png);
+  }
+  .grande:hover, button:active { transform: translateY(calc(-1 * var(--u))); }
+  .grande.suave { border-image-source: url(../arte/sprites/ui_botonRosa.png); }
+  /* Cinta washi pegada arriba (papeles sueltos: dialogo, tutorial, inicio, ficha del diario) */
+  .washi { position: relative; }
+  .washi::before {
+    content: ''; position: absolute; top: calc(-10 * var(--u)); left: calc(50% - 16 * var(--u));
+    width: calc(32 * var(--u)); height: calc(12 * var(--u)); opacity: 0.85; pointer-events: none;
+    background: url(../arte/sprites/ui_cinta.png) 0 0 / 100% 100%; image-rendering: pixelated;
+  }
+
+  /* Texto de ayuda dentro de la pantalla, abajo en el centro: solo aparece en los minijuegos, al decorar o la primera
+     vez que haces algo. --pb (pixeles del lienzo desde abajo) lo sube por encima de los paneles de abajo (actualizarHud). */
+  /* Es una nota de pergamino (arte/generar-notas.py: nota_*.png) con doble contorno, el icono de la accion en su
+     marquito de madera asomando por la izquierda, cinta y chincheta arriba y hojitas y estrella en las esquinas.
+     Las palabras clave salen de color y las teclas como teclas retro (marcarTexto en juego.js). Todo a --u. */
+  #pista { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(var(--pb, 4) * var(--px)); width: max-content; max-width: 90%;
+    box-sizing: border-box; pointer-events: none; display: flex; align-items: center; gap: calc(3 * var(--u));
+    padding: 0 calc(2 * var(--u)) 0 0; margin-left: calc(6 * var(--u)); font-size: var(--t); line-height: 1.3; color: var(--ciruela);
+    border-style: solid; border-color: transparent; border-width: calc(8 * var(--u)); image-rendering: pixelated;
+    border-image: url(../arte/sprites/nota_nota.png) 8 fill / calc(8 * var(--u)) repeat;
+    filter: drop-shadow(0 var(--u) 0 rgba(74, 51, 71, 0.25)); }
+  #pista[hidden] { display: none; }
+  #pista.entra { animation: notaEntra 0.3s ease-out; }
+  @keyframes notaEntra { from { opacity: 0; translate: 0 calc(4 * var(--u)); } 60% { translate: 0 calc(-1 * var(--u)); } to { opacity: 1; translate: 0 0; } }
+  #pista .icoNota { position: relative; flex: none; width: calc(20 * var(--u)); height: calc(20 * var(--u)); margin: calc(-6 * var(--u)) 0 calc(-6 * var(--u)) calc(-18 * var(--u));
+    background: url(../arte/sprites/nota_marco.png) 0 0 / 100% 100%; image-rendering: pixelated; }
+  #pista .icoNota canvas { position: absolute; left: calc(2 * var(--u)); top: calc(2 * var(--u)); width: calc(16 * var(--u)); height: calc(16 * var(--u)); image-rendering: pixelated; }
+  #pista .txt { text-align: center; }
+  #pista .chincheta, #pista .hojas, #pista .estrellita { position: absolute; width: calc(12 * var(--u)); height: calc(12 * var(--u)); image-rendering: pixelated;
+    background: url(../arte/sprites/nota_adornos.png) calc(var(--a) * -12 * var(--u)) 0 / calc(48 * var(--u)) calc(12 * var(--u)); }
+  #pista .hojas { --a: 0; top: calc(-11 * var(--u)); right: calc(-9 * var(--u)); }
+  #pista .estrellita { --a: 1; bottom: calc(-10 * var(--u)); right: calc(-10 * var(--u)); }
+  #pista .chincheta { --a: 2; top: calc(-13 * var(--u)); left: calc(50% - 6 * var(--u)); }
+  #pista kbd { font-size: var(--t); border-width: calc(4 * var(--u)) calc(4 * var(--u)) calc(5 * var(--u));
+    border-image-width: calc(4 * var(--u)) calc(4 * var(--u)) calc(5 * var(--u)); padding: 0 var(--u); margin: calc(-3 * var(--u)) 0; vertical-align: middle; }
+  /* Palabras clave de color (pista, avisos, dialogo y tutorial) */
+  .c-rosa { color: #D9607E; } .c-miel { color: #C27A2E; } .c-verde { color: #4F8F5E; } .c-mar { color: #3F86B0; }
+
+  /* ---------- HUD: botones redondos de fieltro con su icono ---------- */
+  #hud { position: absolute; top: calc(3 * var(--px)); left: calc(3 * var(--px)); right: calc(3 * var(--px)); display: flex; gap: calc(2 * var(--px)); align-items: flex-start; pointer-events: none; transition: opacity 0.6s; }
+  #hud[hidden] { display: none; }
+  #hud .hueco { flex: 1; }
+  .icono {
+    pointer-events: auto; position: relative; cursor: pointer; padding: 0; border: 0;
+    width: calc(20 * var(--px)); height: calc(20 * var(--px)); background-color: transparent;
+    background-image: url(../arte/sprites/hud_tiles.png), url(../arte/sprites/ui_hud.png);
+    background-repeat: no-repeat;
+    background-size: calc(80 * var(--px)) calc(16 * var(--px)), 100% 100%;
+    background-position: calc((2 - var(--n) * 16) * var(--px)) calc(1 * var(--px)), 0 0;
+    image-rendering: pixelated;
+  }
+  .icono:hover { transform: translateY(calc(-1 * var(--px))); filter: brightness(1.04); }
+  .icono.abierto { transform: translateY(calc(1 * var(--px))); filter: brightness(0.94); }
+  .icono[hidden] { display: none; }
+  /* Al entrar en casa, el sillon da saltitos y saca una etiqueta invitando a decorar */
+  .icono.invita { animation: invita 0.9s ease-in-out infinite; }
+  @keyframes invita { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(calc(-2 * var(--px))); } }
+  .invitacion { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: calc(2 * var(--px)); white-space: nowrap; pointer-events: none;
+    font-size: var(--tc); padding: 0 calc(3 * var(--u)); color: var(--ciruela); border-style: solid; border-color: transparent; image-rendering: pixelated;
+    border-width: calc(4 * var(--u)); border-image: url(../arte/sprites/ui_botonMantequilla.png) 4 fill / calc(4 * var(--u)) repeat; }
+  .invitacion[hidden] { display: none; }
+  /* Insignia redonda mantequilla con el numero */
+  .globo {
+    position: absolute; right: calc(-3 * var(--px)); top: calc(-3 * var(--px)); min-width: calc(7 * var(--px)); padding: 0 calc(2 * var(--uc));
+    background: var(--mantequilla); color: var(--ciruela); border: calc(var(--uc) * 2) solid var(--ciruela); border-radius: 999px;
+    font-size: var(--tc); line-height: 1.5; text-align: center; box-sizing: border-box;
+  }
+  .globo[hidden] { display: none; }
+
+  /* Cartel del sitio al que se llega: papel con cinta, aparece, se queda un poco y se va solo */
+  #lugar { position: absolute; left: 50%; top: 22%; transform: translateX(-50%); text-align: center; pointer-events: none;
+    padding: calc(2 * var(--u)) calc(10 * var(--u)); animation: lugar 3s ease-in-out forwards; white-space: nowrap; }
+  #lugar[hidden] { display: none; }
+  #lugar span { font-size: var(--tc); color: var(--tinta2); }
+  #lugar h1 { font-size: calc(var(--t) * 2); margin: 0; line-height: 1.1; color: var(--ciruela); }
+  @keyframes lugar { 0% { opacity: 0; translate: 0 calc(-6 * var(--u)); } 15%, 80% { opacity: 1; translate: 0 0; } 100% { opacity: 0; } }
+
+  /* Avisos: etiquetas de ropa con su agujerito, entran por la izquierda y se van solas */
+  #avisos { position: absolute; left: calc(4 * var(--px)); top: calc(26 * var(--px)); display: flex; flex-direction: column; gap: calc(2 * var(--u)); pointer-events: none; max-width: 60%; }
+  .aviso { display: flex; align-items: center; gap: calc(3 * var(--u)); padding: 0 calc(3 * var(--u)) 0 calc(5 * var(--u)); position: relative; animation: entra 0.35s ease-out;
+    filter: drop-shadow(0 var(--uc) 0 rgba(74, 51, 71, 0.2)); }
+  .aviso::before { content: ''; position: absolute; left: calc(1 * var(--u)); top: calc(50% - 1.5 * var(--u)); width: calc(3 * var(--u)); height: calc(3 * var(--u)); background: var(--ciruela); border-radius: 50%; }
+  .aviso canvas { width: calc(16 * var(--u)); height: calc(16 * var(--u)); image-rendering: pixelated; flex: none; }
+  .aviso.especial { border-image-source: url(../arte/sprites/ui_botonMantequilla.png); }
+  .aviso.sale { opacity: 0; transform: translateX(-20px); transition: opacity 0.5s, transform 0.5s; }
+  @keyframes entra { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
+
+  /* Modo decorar: cinta de arriba y tarjeta del mueble */
+  #cintaDecorar { position: absolute; top: calc(3 * var(--px)); left: 50%; transform: translateX(-50%); pointer-events: none; padding: 0 calc(4 * var(--u)); white-space: nowrap; }
+  #tarjetaDecorar { position: absolute; pointer-events: none; padding: 0 calc(3 * var(--u)); max-width: calc(110 * var(--px)); font-size: var(--tc); }
+  #tarjetaDecorar.izquierda { transform: translateX(-100%); }
+  #tarjetaDecorar b { display: block; font-size: var(--tc); }
+  #tarjetaDecorar i { display: block; font-style: normal; color: var(--tinta2); }
+  #cintaDecorar[hidden], #tarjetaDecorar[hidden] { display: none; }
+  /* Tarjeta del vecino: retazo de tela cosido (arte/sprites/tarjeta_*.png, arte/generar-tarjetas.py) con el retrato en un
+     medallon, nombre, quien es y corazones; adornos en las esquinas. Todo a --u pixeles por pixel de dibujo. */
+  #etiquetaVecino { position: absolute; transform: translateX(-50%); margin-top: calc(3 * var(--u)); pointer-events: none; white-space: nowrap;
+    display: flex; align-items: center; gap: calc(3 * var(--u)); padding: 0 calc(2 * var(--u)) 0 0; image-rendering: pixelated;
+    border-style: solid; border-color: transparent; background: none; border-width: calc(8 * var(--u));
+    border-image: url(../arte/sprites/tarjeta_retazo.png) 8 fill / calc(8 * var(--u)) repeat;
+    filter: drop-shadow(0 var(--u) 0 rgba(74, 51, 71, 0.22)); animation: entraTarjeta 0.25s ease-out; }
+  @keyframes entraTarjeta { from { opacity: 0; translate: 0 calc(-3 * var(--u)); } to { opacity: 1; translate: 0 0; } }
+  #etiquetaVecino .retrato { position: relative; flex: none; width: calc(22 * var(--u)); height: calc(22 * var(--u)); margin: calc(-4 * var(--u)) 0 calc(-4 * var(--u)) calc(-5 * var(--u)); }
+  #etiquetaVecino .retrato i { position: absolute; image-rendering: pixelated; }
+  #etiquetaVecino .ventana { left: calc(4 * var(--u)); top: calc(4 * var(--u)); width: calc(14 * var(--u)); height: calc(14 * var(--u)); border-radius: 50%;
+    background: url(../arte/sprites/vecinos_tiles.png) calc(var(--n) * -16 * var(--u) - var(--u)) calc(1 * var(--u)) / calc(var(--nv) * 16 * var(--u)) calc(16 * var(--u)) no-repeat, var(--fondo); }
+  #etiquetaVecino .aro { inset: 0; background: url(../arte/sprites/tarjeta_aro.png) 0 0 / 100% 100%; }
+  #etiquetaVecino .datos { display: flex; flex-direction: column; align-items: flex-start; gap: calc(1 * var(--u)); }
+  #etiquetaVecino b { font-family: 'Estrella Gordita', 'Estrella', sans-serif; font-size: var(--t); line-height: 1; color: #7A3B4F; }
+  #etiquetaVecino small { font-size: var(--tc); line-height: 1; color: var(--tinta2); }
+  #etiquetaVecino .adorno { position: absolute; width: calc(8 * var(--u)); height: calc(8 * var(--u)); image-rendering: pixelated;
+    background: url(../arte/sprites/tarjeta_adornos.png) calc(var(--a) * -8 * var(--u)) 0 / calc(32 * var(--u)) calc(8 * var(--u)); }
+  /* Corazones de amistad en pixel art (tambien en el diario) */
+  .corazonesPx { display: inline-flex; gap: var(--u); vertical-align: middle; }
+  .corazonesPx .co { width: calc(9 * var(--u)); height: calc(8 * var(--u)); image-rendering: pixelated;
+    background: url(../arte/sprites/tarjeta_corazones.png) 0 0 / calc(18 * var(--u)) calc(8 * var(--u)); }
+  .corazonesPx .co.vacio { background-position: calc(-9 * var(--u)) 0; }
+  #etiquetaVecino[hidden] { display: none; }
+  .ficha { pointer-events: auto; padding: 0 calc(3 * var(--u)); }
+  span.ficha { cursor: default; border-image-source: url(../arte/sprites/ui_botonPapel.png); }
+
+  /* ---------- Paneles que se abren encima del juego ---------- */
+  .capa { position: absolute; inset: 4px; overflow-y: auto; padding: 0 calc(2 * var(--u)); box-sizing: border-box;
+    border-image-source: url(../arte/sprites/ui_papel.png); border-image-slice: 8 fill; scrollbar-width: thin; scrollbar-color: var(--fresa) transparent; }
+  .capa[hidden] { display: none; }
+  .capa header { display: flex; align-items: center; gap: calc(4 * var(--u)); flex-wrap: wrap; }
+  .capa h1 { font-size: var(--t); margin: 0; }
+  .capa h2 { font-size: var(--t); margin: calc(5 * var(--u)) 0 calc(2 * var(--u)); color: var(--tinta2); }
+  .capa header .resumen { flex: 1; color: var(--tinta2); }
+  .cerrar { padding: 0 calc(3 * var(--u)); }
+  .grande { padding: calc(1 * var(--u)) calc(10 * var(--u)); }
+  .rejilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(calc(110 * var(--px)), 1fr)); gap: calc(2 * var(--u)); }
+  .rejilla.pequena { grid-template-columns: repeat(auto-fill, minmax(calc(80 * var(--px)), 1fr)); }
+  .tarjeta { display: flex; gap: calc(3 * var(--u)); align-items: center; padding: 0 calc(2 * var(--u)); text-align: left; }
+  .tarjeta.oculta { opacity: 0.8; }
+  .tarjeta canvas { width: calc(16 * var(--u) * 2); height: calc(16 * var(--u) * 2); image-rendering: pixelated; flex: none; }
+  .tarjeta b { display: block; }
+  .tarjeta small { display: block; font-size: var(--tc); color: var(--tinta2); }
+  .vacio { color: var(--tinta2); margin: 0; }
+  .rareza { display: inline-block; font-size: var(--tc); border-radius: 999px; padding: 0 calc(3 * var(--uc)); margin: var(--uc) 0; color: var(--ciruela); border: var(--uc) solid var(--ciruela); }
+  .estrella { color: var(--miel); }
+  .corazones { color: var(--fresa); letter-spacing: var(--uc); }
+  .corazones i { color: #E6D3C0; font-style: normal; }
+
+  /* Bolsa: el interior de una mochila de cuero (arte/generar-bolsa.py: bolsa_*.png). Todo a 2 --u por pixel del dibujo
+     para que el cuero y las ranuras se vean gorditos; la letra va a --u. */
+  #bolsa { inset: 7% 8%; overflow: hidden; display: flex; flex-direction: column; gap: calc(3 * var(--u)); padding: calc(2 * var(--u)) calc(4 * var(--u)) calc(4 * var(--u));
+    border-width: calc(16 * var(--u)); border-image: url(../arte/sprites/bolsa_cuero.png) 8 fill / calc(16 * var(--u)) repeat; filter: drop-shadow(0 calc(3 * var(--u)) 0 rgba(74, 51, 71, 0.3)); }
+  #bolsa[hidden] { display: none; }
+  #bolsa .cabecera { position: relative; display: flex; align-items: center; justify-content: center; min-height: calc(28 * var(--u)); }
+  #bolsa h1 { font-size: var(--t); font-family: 'Estrella Gordita', 'Estrella', sans-serif; margin: 0; color: #FFF4E0; text-shadow: 0 var(--u) 0 #9C6B4E, var(--u) 0 0 #9C6B4E, calc(-1 * var(--u)) 0 0 #9C6B4E, 0 calc(-1 * var(--u)) 0 #9C6B4E; }
+  /* Contadores: icono + numero en una chapita de papel */
+  #bolsa .contadores { position: absolute; left: 0; top: 50%; transform: translateY(-50%); display: flex; gap: calc(3 * var(--u)); }
+  #bolsa .contador { display: flex; align-items: center; gap: calc(2 * var(--u)); padding: 0 calc(3 * var(--u)) 0 calc(1 * var(--u)); color: var(--ciruela); line-height: 1.1;
+    border-style: solid; border-color: transparent; border-width: calc(4 * var(--u)); border-image: url(../arte/sprites/ui_botonPapel.png) 4 fill / calc(4 * var(--u)) repeat; image-rendering: pixelated; }
+  #bolsa .contador i { width: calc(24 * var(--u)); height: calc(24 * var(--u)); margin: calc(-6 * var(--u)) 0; image-rendering: pixelated;
+    background: url(../arte/sprites/bolsa_iconos.png) calc(var(--n) * -24 * var(--u)) 0 / calc(144 * var(--u)) calc(24 * var(--u)); }
+  #bolsa .contador.conchitas i { width: calc(18 * var(--u)); height: calc(16 * var(--u)); margin: calc(-4 * var(--u)) 0; background: url(../arte/sprites/mostrador_concha.png) 0 0 / 100% 100%; }
+  #bolsa .contador.sube b { display: inline-block; animation: sube 0.35s ease-out; }
+  /* Cerrar: la lengueta de la mochila con su broche de laton */
+  #bolsaCerrar { position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: calc(32 * var(--u)); height: calc(32 * var(--u)); padding: 0; border: 0; cursor: pointer;
+    background: url(../arte/sprites/bolsa_broche.png) 0 0 / 100% 100%; image-rendering: pixelated; filter: drop-shadow(0 var(--u) 0 rgba(74, 51, 71, 0.35)); }
+  #bolsaCerrar span { position: absolute; top: 50%; right: 100%; transform: translateY(-50%); margin-right: calc(2 * var(--u)); }
+  #bolsaCerrar:hover { transform: translateY(calc(-50% - var(--u))) rotate(-6deg); }
+  /* Pestanas: etiquetas de tela cosidas al borde del forro; la elegida es fresa y asoma mas */
+  #bolsaPestanas { display: flex; gap: var(--u); padding: 0 calc(4 * var(--u)); margin-bottom: calc(-8 * var(--u)); position: relative; z-index: 1; }
+  #bolsaPestanas button { display: flex; align-items: center; gap: calc(2 * var(--u)); padding: 0 calc(3 * var(--u)) calc(3 * var(--u)); white-space: nowrap; min-width: 0; color: var(--ciruela); cursor: pointer; image-rendering: pixelated;
+    border-style: solid; border-color: transparent; border-width: calc(10 * var(--u)) calc(10 * var(--u)) calc(6 * var(--u)); background: none; font: inherit;
+    border-image: url(../arte/sprites/bolsa_pestana.png) 5 5 3 fill / calc(10 * var(--u)) calc(10 * var(--u)) calc(6 * var(--u)) repeat; transform: translateY(calc(4 * var(--u))); transition: transform 0.15s; }
+  #bolsaPestanas button:hover { transform: translateY(calc(1 * var(--u))); }
+  #bolsaPestanas button.elegida { border-image-source: url(../arte/sprites/bolsa_pestanaElegida.png); color: #7A3B4F; transform: none; }
+  #bolsaPestanas i { width: calc(24 * var(--u)); height: calc(24 * var(--u)); margin: calc(-6 * var(--u)) 0; image-rendering: pixelated;
+    background: url(../arte/sprites/bolsa_iconos.png) calc(var(--n) * -24 * var(--u)) 0 / calc(144 * var(--u)) calc(24 * var(--u)); }
+  /* Interior: forro con las ranuras a la izquierda, ficha del objeto a la derecha (debajo si no cabe) */
+  #bolsa .interior { flex: 1; min-height: 0; display: flex; gap: calc(4 * var(--u)); }
+  #bolsa .forro { flex: 1; min-width: 0; overflow-y: auto; padding: calc(2 * var(--u)); image-rendering: pixelated; scrollbar-width: thin; scrollbar-color: var(--fresa) transparent;
+    border-style: solid; border-color: transparent; border-width: calc(16 * var(--u)); border-image: url(../arte/sprites/bolsa_forro.png) 8 fill / calc(16 * var(--u)) repeat; }
+  #bolsaRejilla { display: grid; grid-template-columns: repeat(auto-fill, calc(40 * var(--u))); gap: calc(4 * var(--u)); justify-content: center; }
+  /* Ranura: hueco hundido de 20x20 (a 2 --u). El icono va 1 pixel abajo a la derecha, como si se hubiera hundido. */
+  .ranura { position: relative; width: calc(40 * var(--u)); height: calc(40 * var(--u)); padding: 0; border: 0; cursor: pointer; image-rendering: pixelated;
+    background: url(../arte/sprites/bolsa_ranura.png) 0 0 / 100% 100%; }
+  .ranura.vacia { cursor: default; opacity: 0.75; }
+  .ranura canvas { position: absolute; left: calc(5 * var(--u)); top: calc(5 * var(--u)); width: calc(32 * var(--u)); height: calc(32 * var(--u)); image-rendering: pixelated;
+    filter: drop-shadow(var(--u) var(--u) 0 rgba(74, 51, 71, 0.22)); transition: transform 0.12s; }
+  .ranura:not(.vacia):hover canvas { transform: translateY(calc(-2 * var(--u))); }
+  .ranura.elegida { background-image: url(../arte/sprites/bolsa_ranuraElegida.png); }
+  .ranura.elegida canvas { animation: brinco 0.9s ease-in-out infinite; }
+  .ranura.pop canvas { animation: pop 0.25s ease-out; }
+  @keyframes brinco { 50% { transform: translateY(calc(-2 * var(--u))); } }
+  @keyframes pop { 40% { transform: scale(1.25) rotate(-6deg); } }
+  /* Numerito de la ranura: abajo a la derecha, con contorno crema */
+  .ranura .cuantos { position: absolute; right: calc(2 * var(--u)); bottom: 0; font-size: var(--tc); line-height: 1; color: var(--ciruela);
+    text-shadow: var(--uc) 0 0 #FFF8F0, calc(-1 * var(--uc)) 0 0 #FFF8F0, 0 var(--uc) 0 #FFF8F0, 0 calc(-1 * var(--uc)) 0 #FFF8F0; }
+  .ranura .tecla { position: absolute; left: calc(3 * var(--u)); top: calc(2 * var(--u)); font-size: var(--tc); line-height: 1; color: var(--tinta2); }
+  .ranura .lana { position: absolute; right: calc(3 * var(--u)); top: calc(3 * var(--u)); width: calc(6 * var(--u)); height: calc(6 * var(--u)); border-radius: 50%; border: var(--u) solid var(--ciruela); }
+  /* Lo que llevas en la mano o puesto: un lacito de cinta fresa cosido en la esquina de abajo */
+  .ranura .marca { position: absolute; left: calc(3 * var(--u)); bottom: calc(3 * var(--u)); width: calc(6 * var(--u)); height: calc(6 * var(--u)); background: var(--fresa);
+    border: var(--u) solid var(--ciruela); transform: rotate(45deg); }
+  /* Ficha del objeto: retazo de lona con el icono grande en su platito, nombre, para que sirve y su tecla */
+  #bolsaFicha { flex: 0 0 34%; min-width: 0; overflow-y: auto; display: flex; flex-direction: column; align-items: center; gap: calc(2 * var(--u)); text-align: center; padding: 0 calc(2 * var(--u)); image-rendering: pixelated;
+    border-style: solid; border-color: transparent; border-width: calc(16 * var(--u)); border-image: url(../arte/sprites/bolsa_ficha.png) 8 fill / calc(16 * var(--u)) repeat; scrollbar-width: thin; }
+  #bolsaFicha .plato { position: relative; flex: none; width: calc(60 * var(--u)); height: calc(60 * var(--u)); background: url(../arte/sprites/bolsa_plato.png) 0 0 / 100% 100%; image-rendering: pixelated; }
+  #bolsaFicha .plato canvas { position: absolute; left: calc(6 * var(--u)); top: calc(6 * var(--u)); width: calc(48 * var(--u)); height: calc(48 * var(--u)); image-rendering: pixelated; animation: brinco 1.6s ease-in-out infinite; }
+  #bolsaFicha h2 { margin: 0; font-size: var(--t); color: var(--ciruela); }
+  #bolsaFicha p { margin: 0; font-size: var(--tc); color: var(--tinta2); line-height: 1.35; }
+  #bolsaFicha .uso { color: var(--ciruela); font-size: var(--t); }
+  #bolsaFicha kbd { font-size: var(--tc); border-width: calc(4 * var(--uc)) calc(4 * var(--uc)) calc(5 * var(--uc)); }
+  #bolsaFicha .que { display: flex; gap: calc(2 * var(--u)); align-items: center; justify-content: center; flex-wrap: wrap; }
+  @media (max-aspect-ratio: 5/4) { #bolsa .interior { flex-direction: column; } #bolsaFicha { flex: none; max-height: 42%; } }
+
+  /* Tiendecita: un mostrador de pino (arte/generar-mostrador.py: mostrador_*.png) con toldo de rayas, el cartel colgado,
+     la bolsita de conchitas en la esquina, Bellota en su medallon hablando en un bocadillo, letreros colgantes para
+     Comprar/Vender y los articulos como etiquetas de papel kraft colgadas de un cordel. Todo a --u pixeles por pixel. */
+  #tienda { border-image-source: url(../arte/sprites/mostrador_madera.png); overflow: hidden; display: flex; flex-direction: column;
+    padding: calc(18 * var(--u)) calc(4 * var(--u)) calc(2 * var(--u)); }
+  #tienda[hidden] { display: none; }
+  #tienda .toldo { position: absolute; left: calc(-6 * var(--u)); right: calc(-6 * var(--u)); top: calc(-7 * var(--u)); height: calc(18 * var(--u));
+    background: url(../arte/sprites/mostrador_toldo.png) 0 0 / calc(16 * var(--u)) calc(18 * var(--u)) repeat-x; image-rendering: pixelated;
+    filter: drop-shadow(0 var(--u) 0 rgba(74, 51, 71, 0.25)); }
+  #tienda .cabecera { display: flex; align-items: center; justify-content: center; gap: calc(4 * var(--u)); position: relative; min-height: calc(22 * var(--u)); }
+  #tienda h1 { font-size: var(--t); margin: 0; padding: 0 calc(6 * var(--u)); color: #7A3B4F; position: relative; image-rendering: pixelated;
+    border-style: solid; border-color: transparent; border-width: calc(5 * var(--u)); border-image: url(../arte/sprites/mostrador_letrero.png) 5 fill / calc(5 * var(--u)) repeat; }
+  /* Bolsita de conchitas: marcador fisico arriba a la izquierda (el numero salta al cambiar) */
+  #tiendaConchitas { position: absolute; left: 0; top: 50%; transform: translateY(-50%); display: flex; align-items: center; }
+  #tiendaConchitas > i { width: calc(20 * var(--u)); height: calc(20 * var(--u)); background: url(../arte/sprites/mostrador_bolsita.png) 0 0 / 100% 100%; image-rendering: pixelated; position: relative; z-index: 1; }
+  #tiendaConchitas b { margin-left: calc(-5 * var(--u)); padding: 0 calc(3 * var(--u)) 0 calc(5 * var(--u)); font-size: var(--t); line-height: 1.1; color: #7A3B4F; display: flex; align-items: center; gap: var(--u);
+    border-style: solid; border-color: transparent; border-width: calc(4 * var(--u)); border-image: url(../arte/sprites/ui_botonPapel.png) 4 fill / calc(4 * var(--u)) repeat; image-rendering: pixelated; }
+  #tiendaConchitas.sube b { animation: sube 0.35s ease-out; }
+  @keyframes sube { 40% { transform: translateY(calc(-3 * var(--u))) scale(1.08); } }
+  /* Boton de costura para cerrar, a la derecha del cartel */
+  #tiendaCerrar { position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: calc(28 * var(--u)); height: calc(28 * var(--u)); padding: 0; border: 0; cursor: pointer;
+    background: url(../arte/sprites/libro_cerrar.png) 0 0 / 100% 100%; image-rendering: pixelated; filter: drop-shadow(0 var(--u) 0 rgba(74, 51, 71, 0.35)); }
+  #tiendaCerrar span { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); font-size: var(--tc); color: var(--tinta2); white-space: nowrap; }
+  #tiendaCerrar:hover { transform: translateY(calc(-50% - var(--u))); filter: brightness(1.06) drop-shadow(0 calc(2 * var(--u)) 0 rgba(74, 51, 71, 0.35)); }
+  /* Bellota atiende: retrato grande en su medallon y bocadillo con piquito */
+  #tienda .atiende { display: flex; align-items: center; gap: calc(6 * var(--u)); margin: calc(3 * var(--u)) 0 0; }
+  #tienda .retrato { position: relative; flex: none; width: calc(56 * var(--u)); height: calc(56 * var(--u)); }
+  #tienda .retrato .ventana { position: absolute; left: calc(5 * var(--u)); top: calc(5 * var(--u)); width: calc(46 * var(--u)); height: calc(46 * var(--u)); border-radius: 50%; overflow: hidden; background: #C4EADC; }
+  #tienda .retrato .cara { position: absolute; left: calc(-1 * var(--u)); top: calc(2 * var(--u)); width: calc(48 * var(--u)); height: calc(48 * var(--u)); image-rendering: pixelated;
+    background: url(../arte/sprites/tienda_tendera.png) 0 0 / calc(96 * var(--u)) calc(48 * var(--u)); animation: parpadeo 4s steps(1) infinite; }
+  @keyframes parpadeo { 0%, 94% { background-position: 0 0; } 95%, 98% { background-position: calc(-48 * var(--u)) 0; } }
+  #tienda .retrato.habla .cara { animation: parpadeo 4s steps(1) infinite, habla 0.32s steps(2) 4; }
+  #tienda .retrato .aro { position: absolute; inset: 0; background: url(../arte/sprites/mostrador_marco.png) 0 0 / 100% 100%; image-rendering: pixelated; }
+  #tienda .bocadillo { position: relative; flex: 1; min-height: calc(18 * var(--u)); display: flex; align-items: center; padding: 0 calc(2 * var(--u)); image-rendering: pixelated;
+    border-style: solid; border-color: transparent; border-width: calc(8 * var(--u)); border-image: url(../arte/sprites/mostrador_bocadillo.png) 8 fill / calc(8 * var(--u)) repeat;
+    filter: drop-shadow(0 var(--u) 0 rgba(74, 51, 71, 0.18)); }
+  #tienda .bocadillo .pico { position: absolute; left: calc(-16 * var(--u)); top: calc(50% - 5 * var(--u)); width: calc(10 * var(--u)); height: calc(10 * var(--u));
+    background: url(../arte/sprites/mostrador_pico.png) 0 0 / 100% 100%; image-rendering: pixelated; }
+  /* Letreros colgantes: Comprar y Vender. El elegido esta pintado de mantequilla y cuelga un poco mas abajo. */
+  #tienda .letreros { display: flex; justify-content: center; gap: calc(10 * var(--u)); margin: calc(12 * var(--u)) 0 calc(4 * var(--u)); }
+  #tienda .letrero { position: relative; padding: 0 calc(6 * var(--u)); font-size: var(--t); color: var(--ciruela); background: none; image-rendering: pixelated; transform-origin: 50% calc(-12 * var(--u));
+    border-style: solid; border-color: transparent; border-width: calc(5 * var(--u)); border-image: url(../arte/sprites/mostrador_letrero.png) 5 fill / calc(5 * var(--u)) repeat; transition: transform 0.2s; }
+  #tienda .letrero::before, #tienda .letrero::after { content: ''; position: absolute; top: calc(-17 * var(--u)); width: calc(4 * var(--u)); height: calc(15 * var(--u));
+    background: url(../arte/sprites/mostrador_cuerda.png) 0 0 / calc(4 * var(--u)) calc(8 * var(--u)) repeat-y; image-rendering: pixelated; }
+  #tienda .letrero::before { left: calc(-3 * var(--u)); }
+  #tienda .letrero::after { right: calc(-3 * var(--u)); }
+  #tienda .letrero:hover { transform: rotate(-2deg); }
+  #tienda .letrero.elegida { border-image-source: url(../arte/sprites/mostrador_letreroElegido.png); color: #7A3B4F; transform: translateY(calc(2 * var(--u))); }
+  #tienda .letrero.elegida::before, #tienda .letrero.elegida::after { height: calc(17 * var(--u)); top: calc(-19 * var(--u)); }
+  /* Articulos: etiquetas kraft colgadas de un cordel, con el icono sobre un platito de color */
+  #tiendaLista { flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(calc(64 * var(--px)), 1fr)); align-content: start;
+    gap: calc(8 * var(--u)) calc(3 * var(--u)); padding: calc(8 * var(--u)) calc(2 * var(--u)) calc(2 * var(--u)); scrollbar-width: thin; scrollbar-color: var(--fresa) transparent; }
+  .articulo { position: relative; display: flex; align-items: center; gap: calc(3 * var(--u)); padding: 0 calc(1 * var(--u)); text-align: left; color: var(--ciruela); background: none;
+    image-rendering: pixelated; border-style: solid; border-color: transparent; border-width: calc(8 * var(--u)); border-image: url(../arte/sprites/mostrador_kraft.png) 8 fill / calc(8 * var(--u)) repeat;
+    transform-origin: 50% calc(-12 * var(--u)); transition: transform 0.2s; filter: drop-shadow(0 var(--u) 0 rgba(74, 51, 71, 0.2)); }
+  .articulo::before { content: ''; position: absolute; top: calc(-13 * var(--u)); left: calc(50% - 6 * var(--u)); width: calc(12 * var(--u)); height: calc(10 * var(--u));
+    background: url(../arte/sprites/mostrador_hilo.png) 0 0 / 100% 100%; image-rendering: pixelated; }
+  .articulo:hover { transform: rotate(-2deg); }
+  .articulo .disco { position: relative; flex: none; width: calc(20 * var(--u)); height: calc(20 * var(--u)); margin: calc(-3 * var(--u)) 0 calc(-3 * var(--u)) calc(-3 * var(--u));
+    background: url(../arte/sprites/mostrador_discos.png) calc(var(--d) * -20 * var(--u)) 0 / calc(80 * var(--u)) calc(20 * var(--u)); image-rendering: pixelated; }
+  .articulo .disco canvas { position: absolute; left: calc(2 * var(--u)); top: calc(1 * var(--u)); width: calc(16 * var(--u)); height: calc(16 * var(--u)); image-rendering: pixelated; }
+  .articulo b { display: block; font-size: var(--t); line-height: 1.05; }
+  .articulo small { display: block; font-size: var(--tc); color: var(--tinta2); }
+  .precio { display: inline-flex; align-items: center; gap: var(--u); font-family: 'Estrella Gordita', 'Estrella', sans-serif; font-size: var(--t); line-height: 1.1; color: #7A3B4F; }
+  .precio small { display: inline; margin-left: var(--u); }
+  i.concha { display: inline-block; flex: none; width: calc(9 * var(--u)); height: calc(8 * var(--u)); background: url(../arte/sprites/mostrador_concha.png) 0 0 / 100% 100%; image-rendering: pixelated; }
+  .articulo.caro { filter: saturate(0.55) drop-shadow(0 var(--u) 0 rgba(74, 51, 71, 0.12)); opacity: 0.8; }
+  .articulo.caro .precio { color: var(--tinta2); }
+  .articulo.tuyo .precio { color: #4F8F5E; font-size: var(--tc); }
+  .articulo .globo { right: calc(-6 * var(--u)); top: calc(-6 * var(--u)); }
+  #tienda .vacio { grid-column: 1 / -1; text-align: center; }
+
+  /* Inicio: el diario de portada (libreta de espiral con cinta, pegatinas y garabatos) en medio del paisaje,
+     que se dibuja en el lienzo (dibujarPortada). Piezas en arte/sprites/portada_*.png (arte/generar-portada.py). */
+  #inicio { display: flex; align-items: center; justify-content: center; inset: 4px; border: 0; padding: 0; background: none; border-radius: 12px; overflow: visible; }
+  #inicio[hidden] { display: none; }
+  #inicio .hoja { position: relative; display: flex; flex-direction: column; align-items: center; gap: calc(3 * var(--u)); box-sizing: border-box;
+    width: calc(140 * var(--px)); padding: calc(4 * var(--u)) calc(10 * var(--u)) calc(4 * var(--u)) calc(14 * var(--u)); text-align: center;
+    filter: drop-shadow(0 calc(2 * var(--u)) 0 rgba(74, 51, 71, 0.18)); animation: abreDiario 0.5s ease-out; }
+  @keyframes abreDiario { from { opacity: 0; transform: translateY(calc(8 * var(--u))) scale(0.97); } to { opacity: 1; transform: none; } }
+  #inicio .hoja > i { position: absolute; pointer-events: none; image-rendering: pixelated; }
+  /* Espiral de alambre en el canto izquierdo: una anilla de 12x8 que se repite */
+  #inicio .espiral { left: calc(-15 * var(--u)); top: calc(2 * var(--u)); bottom: calc(2 * var(--u)); width: calc(12 * var(--u) * 2);
+    background: url(../arte/sprites/portada_espiral.png) 0 0 / calc(12 * var(--u) * 2) calc(8 * var(--u) * 2) repeat-y; }
+  /* Cinta washi con textura arriba */
+  #inicio .cinta { top: calc(-15 * var(--u)); left: calc(50% - 32 * var(--u)); width: calc(64 * var(--u)); height: calc(20 * var(--u)); opacity: 0.93;
+    background: url(../arte/sprites/portada_cinta.png) 0 0 / 100% 100%; }
+  /* Pegatinas y garabatos (tira de 9 cuadros de 16x16, a 2 pixeles de letra por pixel) */
+  #inicio .sticker { width: calc(32 * var(--u)); height: calc(32 * var(--u));
+    background: url(../arte/sprites/portada_stickers.png) calc(var(--s) * -32 * var(--u)) 0 / calc(9 * 32 * var(--u)) 100%;
+    filter: drop-shadow(0 var(--u) 0 rgba(74, 51, 71, 0.2)); }
+  #inicio .sticker.lapiz { filter: none; opacity: 0.8; }
+  #inicio .sticker.mece { animation: meceSticker 3s ease-in-out infinite; }
+  @keyframes meceSticker { 0%, 100% { translate: 0 0; } 50% { translate: 0 calc(-1 * var(--u)); } }
+
+  /* Titulo: letras gorditas en degradado miel con contorno ciruela (la capa ::before va detras) y una estrella con carita */
+  #inicio .titulo { margin: calc(2 * var(--u)) 0 0; line-height: 1; display: flex; flex-direction: column; align-items: center; }
+  #inicio .titulo .palabra { position: relative; display: inline-block; color: var(--ciruela);
+    text-shadow: var(--u) 0 var(--ciruela), calc(-1 * var(--u)) 0 var(--ciruela), 0 var(--u) var(--ciruela), 0 calc(-1 * var(--u)) var(--ciruela),
+      var(--u) var(--u) var(--ciruela), calc(-1 * var(--u)) var(--u) var(--ciruela), var(--u) calc(-1 * var(--u)) var(--ciruela), calc(-1 * var(--u)) calc(-1 * var(--u)) var(--ciruela),
+      0 calc(3 * var(--u)) #C9708A, var(--u) calc(3 * var(--u)) #C9708A, calc(-1 * var(--u)) calc(3 * var(--u)) #C9708A; }
+  /* El relleno en degradado va en una capa encima (el texto de debajo hace de contorno) */
+  #inicio .titulo .palabra::after { content: attr(data-t); position: absolute; inset: 0; color: transparent; text-shadow: none;
+    background: linear-gradient(180deg, #FFF3C4 0 28%, #FFD66B 28% 56%, #F7B25E 56% 78%, #EE8F4E 78%); -webkit-background-clip: text; background-clip: text; }
+  #inicio .titulo .uno { font-size: calc(var(--t) * 2); }
+  #inicio .titulo .dos { display: flex; align-items: center; gap: calc(2 * var(--u)); margin-top: calc(1 * var(--u)); }
+  #inicio .titulo .dos .palabra { font-size: calc(var(--t) * 3); }
+  #inicio .estrellaTitulo { position: static; display: inline-block; width: calc(32 * var(--u) * 1.5); height: calc(32 * var(--u) * 1.5);
+    background: url(../arte/sprites/portada_stickers.png) calc(5 * -48 * var(--u)) 0 / calc(9 * 48 * var(--u)) 100%; image-rendering: pixelated;
+    filter: drop-shadow(0 calc(2 * var(--u)) 0 rgba(201, 112, 138, 0.55)); animation: brinca 1.8s ease-in-out infinite; }
+  @keyframes brinca { 0%, 100% { transform: translateY(0) rotate(0deg); } 30% { transform: translateY(calc(-4 * var(--u))) rotate(-8deg); } 60% { transform: translateY(0) rotate(6deg); } }
+  #inicio .lema { margin: 0; max-width: 22em; color: var(--tinta2); font-family: 'Estrella Gordita', 'Estrella', sans-serif; }
+
+  /* Casilla del nombre: un cartelito de madera clara colgado de dos cuerdas */
+  #formNombre { display: flex; flex-direction: column; align-items: center; gap: calc(2 * var(--u)); }
+  #formNombre label { color: var(--ciruela); }
+  #inicio .cartelito { position: relative; margin-top: calc(6 * var(--u)); }
+  #inicio .cartelito::before, #inicio .cartelito::after { content: ''; position: absolute; bottom: calc(100% - 4 * var(--u)); width: var(--u); height: calc(10 * var(--u));
+    background: #B98A5E; box-shadow: var(--u) 0 0 var(--ciruela), calc(-1 * var(--u)) 0 0 var(--ciruela); }
+  #inicio .cartelito::before { left: 22%; transform: rotate(14deg); transform-origin: bottom; }
+  #inicio .cartelito::after { right: 22%; transform: rotate(-14deg); transform-origin: bottom; }
+  #inicio #nombre { border-image: url(../arte/sprites/portada_cartel.png) 8 fill / calc(8 * var(--u)) repeat; border-width: calc(8 * var(--u));
+    padding: 0 calc(2 * var(--u)); font-family: 'Estrella Gordita', 'Estrella', sans-serif; color: var(--ciruela); }
+  #inicio #nombre:focus { filter: brightness(1.03) drop-shadow(0 0 calc(2 * var(--u)) rgba(255, 224, 138, 0.9)); }
+  #nombre { text-align: center; width: 10em; padding: 0 calc(4 * var(--u)); outline: none; }
+
+  /* Botones de portada: madera tallada (Continuar) y tela cosida (Como se juega), con canto que da relieve */
+  #inicio .botones { display: flex; gap: calc(4 * var(--u)); flex-wrap: wrap; justify-content: center; margin-top: calc(1 * var(--u)); }
+  #inicio .madera, #inicio .tela { border-style: solid; border-color: transparent; background: none; image-rendering: pixelated; border-width: calc(5 * var(--u)); padding: 0 calc(6 * var(--u)) calc(1 * var(--u)); font-family: 'Estrella Gordita', 'Estrella', sans-serif; font-size: var(--t); line-height: 1.25; }
+  #inicio .madera { border-image: url(../arte/sprites/portada_botonMadera.png) 5 fill / calc(5 * var(--u)) repeat; color: #6B4530; }
+  #inicio .tela { border-image: url(../arte/sprites/portada_botonTela.png) 5 fill / calc(5 * var(--u)) repeat; color: var(--ciruela); }
+  #inicio .madera:hover, #inicio .tela:hover { transform: translateY(calc(-1 * var(--u))); filter: brightness(1.05); }
+  #inicio .madera:active, #inicio .tela:active { transform: translateY(calc(1 * var(--u))); filter: brightness(0.96); }
+  #nombre::placeholder { color: var(--ciruela); opacity: 0.45; }
+  #nombre.falta { animation: mece 0.4s; }
+  #nombreAviso { font-size: var(--tc); min-height: 1.5em; color: #B5577A; }
+  @keyframes mece { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+  /* Tutorial: un papelito con cinta, arriba en el centro entre el reloj y los iconos */
+  #tutorial {
+    position: absolute; top: calc(4 * var(--px)); left: calc(34 * var(--px)); width: calc(134 * var(--px)); box-sizing: border-box;
+    padding: 0 calc(3 * var(--u)) calc(1 * var(--u)); text-align: center; animation: baja 0.35s ease-out;
+  }
+  #tutorial[hidden] { display: none; }
+  #tutorial { border-image-source: url(../arte/sprites/nota_nota.png); }
+  #tutorial.bien { border-image-source: url(../arte/sprites/ui_fieltro.png); }
+  #tutorialPaso { font-size: var(--tc); color: #B5577A; letter-spacing: var(--uc); }
+  #tutorialTexto { margin: 0 0 calc(2 * var(--u)); }
+  #tutorialTexto b { font-family: 'Estrella'; background: var(--fieltro); border: var(--uc) solid var(--ciruela); padding: 0 calc(2 * var(--uc)); }
+  #tutorial .cerrar { font-size: var(--tc); }
+  @keyframes baja { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+
+  /* Elegir donde vivir (partida nueva): el mismo papelito que el tutorial, con un aviso si el sitio no vale */
+  #elegirHogar {
+    position: absolute; bottom: calc(4 * var(--px)); left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(200 * var(--px)); box-sizing: border-box;
+    padding: 0 calc(3 * var(--u)) calc(1 * var(--u)); text-align: center; animation: sube 0.35s ease-out;
+  }
+  #elegirHogar[hidden] { display: none; }
+  #elegirPaso { font-size: var(--tc); color: #B5577A; letter-spacing: var(--uc); }
+  #elegirTexto { margin: 0; font-size: var(--tc); }
+  #elegirTeclas { font-size: var(--tc); margin: 0; opacity: 0.75; }
+  #elegirAviso { font-size: var(--tc); color: #B5577A; margin: 0; }
+  #elegirAviso:empty { display: none; }
+  #elegirVolver { font-size: var(--tc); padding: 0 calc(3 * var(--u)); margin-top: var(--u); }
+  #elegirVolver[hidden] { display: none; }
+  @keyframes sube { from { opacity: 0; translate: 0 10px; } to { opacity: 1; translate: 0 0; } }
+
+  /* Ayuda: papel de libreta con renglones */
+  /* Como se juega: libro abierto de dos paginas con anillas en el lomo, tapa de cuero cosida (arte/generar-libro.py),
+     pestanas de tela arriba, teclas con relieve (kbd) y una vineta animada en cada seccion (VINETAS en juego.js). */
+  #ayuda { border: 0; border-image: none; background: rgba(74, 51, 71, 0.22); padding: calc(3 * var(--u)) calc(6 * var(--u)) calc(4 * var(--u));
+    display: flex; flex-direction: column; overflow: hidden; border-radius: 12px; z-index: 5; }
+  #ayuda[hidden] { display: none; }
+  .pestanasLibro { display: flex; gap: calc(2 * var(--u)); padding: 0 calc(46 * var(--u)) 0 calc(14 * var(--u)); position: relative; z-index: 1; margin-bottom: calc(-7 * var(--u)); flex-wrap: wrap; }
+  .pestanaLibro { display: flex; align-items: center; gap: calc(2 * var(--u)); cursor: pointer; color: var(--ciruela); font-family: 'Estrella Gordita', 'Estrella', sans-serif; font-size: var(--t);
+    border-style: solid; border-color: transparent; background: none; image-rendering: pixelated; line-height: 1.25;
+    border-width: calc(8 * var(--u)) calc(8 * var(--u)) calc(6 * var(--u)); border-image: var(--m) 8 fill / calc(8 * var(--u)) repeat;
+    padding: 0 calc(2 * var(--u)) calc(4 * var(--u)); transform: translateY(calc(4 * var(--u))); filter: brightness(0.95); transition: transform 0.15s; }
+  .pestanaLibro:hover { transform: translateY(calc(2 * var(--u))); filter: none; }
+  .pestanaLibro.activa { transform: none; filter: none; z-index: 3; }
+  .pestanaLibro canvas { width: calc(16 * var(--u)); height: calc(16 * var(--u)); image-rendering: pixelated; }
+  .pestanaLibro small { font-family: 'Estrella', sans-serif; font-size: var(--tc); color: var(--tinta2); }
+  /* Boton de cerrar: un boton de costura fresa cosido en X, colgado en la esquina */
+  #ayudaCerrar { position: absolute; top: calc(2 * var(--u)); right: calc(8 * var(--u)); z-index: 4; width: calc(32 * var(--u)); height: calc(32 * var(--u)); padding: 0; border: 0; cursor: pointer;
+    background: url(../arte/sprites/libro_cerrar.png) 0 0 / 100% 100%; image-rendering: pixelated; filter: drop-shadow(0 var(--u) 0 rgba(74, 51, 71, 0.35)); }
+  #ayudaCerrar span { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); font-size: var(--tc); color: #FFFBF3; white-space: nowrap; text-shadow: 0 var(--uc) 0 var(--ciruela); }
+  #ayudaCerrar:hover { transform: translateY(calc(-1 * var(--u))); filter: brightness(1.06) drop-shadow(0 calc(2 * var(--u)) 0 rgba(74, 51, 71, 0.35)); }
+  .libro { position: relative; flex: 1; min-height: 0; display: flex; border-style: solid; border-color: transparent; background: none; image-rendering: pixelated;
+    border-width: calc(8 * var(--u)); border-image: url(../arte/sprites/libro_tapa.png) 8 fill / calc(8 * var(--u)) repeat; }
+  .libro > i { position: absolute; pointer-events: none; image-rendering: pixelated; z-index: 2; }
+  .libro .lomo { left: calc(50% - 20 * var(--u)); width: calc(40 * var(--u)); top: calc(2 * var(--u)); bottom: calc(2 * var(--u));
+    background: url(../arte/sprites/libro_anilla.png) 0 0 / calc(40 * var(--u)) calc(16 * var(--u)) repeat-y; }
+  .libro .clip { right: calc(4 * var(--u)); top: calc(-6 * var(--u)); width: calc(16 * var(--u)); height: calc(32 * var(--u)); background: url(../arte/sprites/libro_clip.png) 0 0 / 100% 100%; }
+  .libro .cintaLibro { width: calc(48 * var(--u)); height: calc(15 * var(--u)); background: url(../arte/sprites/portada_cinta.png) 0 0 / 100% 100%; opacity: 0.9; }
+  .libro .sticker { width: calc(32 * var(--u)); height: calc(32 * var(--u)); filter: drop-shadow(0 var(--u) 0 rgba(74, 51, 71, 0.2));
+    background: url(../arte/sprites/portada_stickers.png) calc(var(--s) * -32 * var(--u)) 0 / calc(9 * 32 * var(--u)) 100%; }
+  .pliego { display: none; flex: 1; min-width: 0; gap: calc(14 * var(--u)); }
+  .pliego.activo { display: flex; }
+  .pagina { flex: 1; min-width: 0; overflow-y: auto; box-sizing: border-box; scrollbar-width: thin; scrollbar-color: var(--fresa) transparent;
+    border-style: solid; border-color: transparent; border-width: calc(6 * var(--u)); border-image: url(../arte/sprites/ui_papel.png) 8 fill / calc(8 * var(--u)) repeat;
+    padding: calc(2 * var(--u)) calc(4 * var(--u)); }
+  #ayuda .pagina > h1 { font-size: calc(var(--t) * 2); margin: 0 0 calc(2 * var(--u)); color: var(--c); line-height: 1.1; text-shadow: 0 var(--u) 0 var(--papelSombra); }
+  /* Margen extra junto al lomo para que las anillas no tapen el texto */
+  .pagina:first-child { padding-right: calc(12 * var(--u)); }
+  .pagina:last-child { padding-left: calc(12 * var(--u)); }
+  .sec { padding: calc(3 * var(--u)) 0 calc(4 * var(--u)); border-bottom: var(--u) dashed var(--renglon); }
+  .sec:last-child { border-bottom: 0; }
+  .sec h2 { display: flex; align-items: center; flex-wrap: wrap; gap: calc(2 * var(--u)); margin: 0 0 calc(2 * var(--u)); font-size: var(--t); color: var(--c); }
+  .sec .cuerpo { display: flex; gap: calc(4 * var(--u)); align-items: flex-start; flex-wrap: wrap; }
+  .sec p { margin: 0; flex: 1; min-width: 12em; color: var(--ciruela); }
+  .sec p b { color: var(--c); }
+  .vineta { width: calc(96 * var(--u)); height: calc(64 * var(--u)); image-rendering: pixelated; flex: none; margin: calc(3 * var(--u)) var(--u) var(--u) calc(3 * var(--u));
+    box-shadow: 0 0 0 calc(2 * var(--u)) #FFFBF3, 0 0 0 calc(3 * var(--u)) var(--ciruela), 0 calc(3 * var(--u)) 0 calc(2 * var(--u)) rgba(74, 51, 71, 0.18); }
+  kbd { display: inline-block; min-width: 0.7em; text-align: center; font-family: 'Estrella Gordita', 'Estrella', sans-serif; font-size: var(--t); line-height: 1; color: var(--ciruela);
+    border-style: solid; border-color: transparent; border-width: calc(4 * var(--u)) calc(4 * var(--u)) calc(5 * var(--u)); image-rendering: pixelated;
+    border-image: url(../arte/sprites/libro_tecla.png) 4 4 5 fill / calc(4 * var(--u)) calc(4 * var(--u)) calc(5 * var(--u)) repeat; padding: 0 var(--u); }
+  .teclas { display: inline-flex; gap: var(--u); flex-wrap: wrap; align-items: center; }
+  .teclas i { font-style: normal; font-size: var(--tc); color: var(--tinta2); }
+
+  /* Ajustes: menu pequeno de fieltro bajo su boton */
+  #ajustes { inset: calc(26 * var(--px)) calc(3 * var(--px)) auto auto; width: min(calc(150 * var(--px)), 90%); border-image-source: url(../arte/sprites/ui_fieltro.png); }
+  .ajuste { display: flex; align-items: center; gap: calc(3 * var(--u)); margin: calc(3 * var(--u)) 0; }
+  .ajuste button { padding: 0 calc(3 * var(--u)); min-width: 6.5em; }
+  .ajuste input[type=range] { flex: 1; accent-color: var(--fresa); min-width: 0; }
+  #ajustes .abajo { display: flex; flex-direction: column; gap: calc(2 * var(--u)); margin: calc(4 * var(--u)) 0 calc(2 * var(--u)); }
+  #ajustes .abajo button { border-image-source: url(../arte/sprites/ui_botonPapel.png); }
+
+  /* Armario: fieltro */
+  #vestidor { inset: 18% 12% 12% 12%; border-image-source: url(../arte/sprites/ui_fieltro.png); }
+  .filaRopa { display: flex; align-items: center; gap: calc(3 * var(--u)); padding: calc(1 * var(--u)) calc(3 * var(--u)); border: var(--uc) dashed transparent; }
+  .filaRopa.activa { border-color: var(--fresa); background: var(--papelBrillo); }
+  .filaRopa b { width: 6em; }
+  .filaRopa small { color: var(--tinta2); }
+  .muestra { width: calc(10 * var(--u)); height: calc(10 * var(--u)); border: var(--uc) solid var(--ciruela); display: inline-flex; align-items: center; justify-content: center; font-size: var(--tc); opacity: 0.55; }
+  .muestra.puesta { opacity: 1; outline: calc(2 * var(--uc)) solid var(--miel); }
+
+  /* Dialogo con un vecino: una nota de papel con cinta abajo */
+  /* Dialogo con un vecino: el retazo de tela cosido de su tarjeta (tarjeta_retazo), el retrato en el medallon de madera
+     asomando por arriba a la izquierda (se mece mientras habla), su nombre en una cinta y una huellita o flechita que
+     bota abajo a la derecha (Espacio para seguir). Los consejos del juego, en cambio, son notas de pergamino (#pista). */
+  #dialogo { position: absolute; left: 4%; right: 4%; bottom: 4%; display: flex; gap: calc(4 * var(--u)); align-items: flex-start; padding: 0 calc(4 * var(--u)) calc(2 * var(--u)) 0;
+    border-style: solid; border-color: transparent; background: none; border-width: calc(8 * var(--u)); image-rendering: pixelated;
+    border-image: url(../arte/sprites/tarjeta_retazo.png) 8 fill / calc(8 * var(--u)) repeat;
+    filter: drop-shadow(0 var(--u) 0 rgba(74, 51, 71, 0.25)); animation: dialogoEntra 0.3s ease-out; }
+  #dialogo[hidden] { display: none; }
+  @keyframes dialogoEntra { from { opacity: 0; translate: 0 calc(6 * var(--u)); } to { opacity: 1; translate: 0 0; } }
+  #dialogo .retrato { position: relative; flex: none; width: calc(44 * var(--u)); height: calc(44 * var(--u)); margin: calc(-22 * var(--u)) 0 0 calc(-6 * var(--u)); }
+  #dialogo .retrato .ventana { position: absolute; left: calc(8 * var(--u)); top: calc(8 * var(--u)); width: calc(28 * var(--u)); height: calc(28 * var(--u));
+    border-radius: 50%; overflow: hidden; background: var(--fondoCara, var(--fieltro)); }
+  #dialogo .retrato canvas { position: absolute; left: calc(-2 * var(--u)); top: calc(2 * var(--u)); width: calc(32 * var(--u)); height: calc(32 * var(--u)); image-rendering: pixelated; }
+  #dialogo .retrato.habla canvas { animation: habla 0.32s steps(2) 4; }
+  @keyframes habla { from { translate: 0 0; } to { translate: 0 calc(-2 * var(--u)); } }
+  #dialogo .retrato .aro { position: absolute; inset: 0; background: url(../arte/sprites/tarjeta_aro.png) 0 0 / 100% 100%; image-rendering: pixelated; }
+  #dialogo .texto { flex: 1; min-width: 0; }
+  #dialogoNombre { display: inline-block; padding: 0 calc(3 * var(--u)); margin-top: calc(-14 * var(--u)); color: #7A3B4F; border-image-source: url(../arte/sprites/ui_botonMantequilla.png); }
+  #dialogoTexto { margin: calc(2 * var(--u)) 0; }
+  #dialogoTexto b { background: var(--fieltro); padding: 0 calc(2 * var(--uc)); }
+  #dialogoPista { margin: calc(2 * var(--u)) 0; background: #FFF1C9; border-left: calc(2 * var(--u)) solid var(--miel); padding: 0 calc(3 * var(--u)); }
+  #dialogoPista[hidden] { display: none; }
+  #dialogoPie { position: absolute; right: calc(-2 * var(--u)); bottom: calc(-4 * var(--u)); display: flex; align-items: center; gap: calc(2 * var(--u)); font-size: var(--tc); color: var(--tinta2); }
+  #dialogoPie kbd { font-size: var(--tc); border-width: calc(4 * var(--uc)) calc(4 * var(--uc)) calc(5 * var(--uc));
+    border-image-width: calc(4 * var(--uc)) calc(4 * var(--uc)) calc(5 * var(--uc)); padding: 0 var(--uc); }
+  #dialogo .texto { padding-bottom: calc(6 * var(--u)); }
+  #dialogoPie i { width: calc(8 * var(--u)); height: calc(8 * var(--u)); image-rendering: pixelated; animation: bota 0.7s steps(2) infinite;
+    background: url(../arte/sprites/nota_avanzar.png) calc(var(--a) * -8 * var(--u)) 0 / calc(16 * var(--u)) calc(8 * var(--u)); }
+  @keyframes bota { from { translate: 0 0; } to { translate: 0 calc(-2 * var(--u)); } }
+
+  /* ---------- Enciclopedia: el diario de campo de la gatita ---------- */
+  #enciclopedia { border-image-source: url(../arte/sprites/ui_tapa.png); padding: calc(2 * var(--u)) calc(12 * var(--u)) calc(2 * var(--u)) calc(2 * var(--u)); overflow: visible; display: flex; }
+  #enciclopedia[hidden] { display: none; }
+  .paginas { flex: 1; display: flex; min-height: 0; background: var(--papel); border: var(--uc) solid var(--ciruela); position: relative; }
+  .paginas::after {         /* costura del centro */
+    content: ''; position: absolute; top: 0; bottom: 0; left: calc(50% - 3 * var(--u)); width: calc(6 * var(--u)); pointer-events: none;
+    background: linear-gradient(to right, transparent, var(--papelSombra) 40%, var(--ciruela) 48%, var(--ciruela) 52%, var(--papelSombra) 60%, transparent);
+  }
+  .pagina { flex: 1; min-width: 0; overflow-y: auto; padding: calc(3 * var(--u)) calc(6 * var(--u)); scrollbar-width: thin; scrollbar-color: var(--fresa) transparent;
+    background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--t) * 1.25 - var(--uc)), var(--renglon) calc(var(--t) * 1.25 - var(--uc)), var(--renglon) calc(var(--t) * 1.25)); }
+  .pagina header { display: flex; align-items: baseline; gap: calc(3 * var(--u)); flex-wrap: wrap; margin-bottom: calc(3 * var(--u)); }
+  .pagina h1 { margin: 0; font-size: var(--t); }
+  .pagina .resumen { color: var(--tinta2); font-size: var(--tc); }
+  .sellos { display: grid; grid-template-columns: repeat(auto-fill, calc(28 * var(--u))); gap: calc(2 * var(--u)); }
+  .sello {
+    width: calc(28 * var(--u)); height: calc(28 * var(--u)); padding: 0; position: relative; display: flex; align-items: center; justify-content: center;
+    border: calc(4 * var(--u)) solid transparent; border-image: url(../arte/sprites/ui_sello.png) 4 fill / calc(4 * var(--u)) repeat; image-rendering: pixelated; background: none;
+    box-sizing: border-box;
+  }
+  .sello canvas { width: calc(16 * var(--u)); height: calc(16 * var(--u)); image-rendering: pixelated; }
+  .sello.oculto canvas { opacity: 0.55; }
+  /* Pagina de tesoros y fosiles: pegatinas un poco torcidas con su borde blanco recortado */
+  .sello.pegatina { transform: rotate(var(--giro, 0deg)); }
+  .sello.pegatina:not(.oculto) canvas { filter: drop-shadow(var(--uc) 0 0 #fff) drop-shadow(calc(-1 * var(--uc)) 0 0 #fff) drop-shadow(0 var(--uc) 0 #fff) drop-shadow(0 calc(-1 * var(--uc)) 0 #fff) drop-shadow(0 var(--uc) 0 rgba(74,51,71,0.35)); }
+  .sello.elegido { outline: calc(2 * var(--uc)) solid var(--fresa); outline-offset: calc(-1 * var(--u)); }
+  .sello .brillo { position: absolute; right: calc(-1 * var(--u)); top: calc(-3 * var(--u)); color: var(--miel); font-size: var(--tc); text-shadow: 0 var(--uc) 0 var(--ciruela); }
+  /* Luminiscente: estrella de neon en la esquina de abajo (si tambien es brillante, no se pisan) */
+  .sello .brillo.luz { top: auto; bottom: calc(-3 * var(--u)); color: #7DF9FF; text-shadow: 0 var(--uc) 0 #2E2266, 0 0 calc(3 * var(--u)) #7DF9FF; }
+  .ficha-diario { display: flex; flex-direction: column; gap: calc(2 * var(--u)); }
+  .polaroid {
+    align-self: center; background: var(--papelBrillo); border: var(--uc) solid var(--ciruela); padding: calc(3 * var(--u)) calc(3 * var(--u)) calc(9 * var(--u));
+    box-shadow: var(--uc) var(--uc) 0 var(--papelSombra); margin-top: calc(6 * var(--u)); position: relative;
+  }
+  .polaroid canvas { display: block; width: calc(16 * var(--u) * 4); height: calc(16 * var(--u) * 4); image-rendering: pixelated; background: var(--fieltro); }
+  .polaroid .pie { position: absolute; left: 0; right: 0; bottom: calc(1 * var(--u)); text-align: center; font-size: var(--tc); color: var(--tinta2); }
+  .ficha-diario h1 { text-align: center; margin: 0; }
+  .ficha-diario p { margin: 0; }
+  .ficha-diario .nota { color: var(--tinta2); }
+  .tampon {   /* sello de tinta con la rareza */
+    align-self: flex-end; border: calc(2 * var(--uc)) solid currentColor; border-radius: 999px; padding: 0 calc(4 * var(--u)); font-size: var(--tc); opacity: 0.85;
+  }
+  .pestanas { position: absolute; right: calc(-6 * var(--u)); top: calc(10 * var(--u)); display: flex; flex-direction: column; gap: calc(2 * var(--u)); }
+  .pestana {
+    width: calc(24 * var(--u)); height: calc(22 * var(--u)); padding: 0; display: flex; align-items: center; justify-content: center;
+    border: calc(8 * var(--u)) solid transparent; border-image-slice: 8 fill; border-image-width: calc(8 * var(--u)); image-rendering: pixelated; background: none;
+    transform: translateX(calc(-4 * var(--u))); transition: transform 0.15s; box-sizing: border-box; font-size: var(--t); color: var(--ciruela);
+  }
+  .pestana canvas { width: calc(16 * var(--u)); height: calc(16 * var(--u)); image-rendering: pixelated; flex: none; }
+  .pestana.activa { transform: none; }
+  .pestana:hover { transform: translateX(calc(-1 * var(--u))); }
+  .enci-cerrar { position: absolute; right: calc(14 * var(--u)); bottom: calc(-2 * var(--u)); }
+</style>
+</head>
+<body>
+  <div id="marco">
+    <canvas id="lienzo" width="240" height="160"></canvas>
+
+    <!-- Arriba a la derecha: iconos sin texto (el nombre sale al pasar el raton). El reloj, el clima
+         y la barra de semillas se dibujan dentro del lienzo. -->
+    <div id="hud" hidden>
+      <span class="hueco"></span>
+      <button class="icono" id="botonDecorar" type="button" style="--n:4" title="Decorar la casita o el jardín (B)" aria-label="Decorar" hidden><span class="invitacion" id="decorarInvita" hidden>¡Decorar!</span></button>
+      <button class="icono" id="botonSemillas" type="button" style="--n:3" title="Semillas (G)" aria-label="Semillas"></button>
+      <button class="icono" id="botonEnci" type="button" style="--n:1" title="Diario (C)" aria-label="Diario"></button>
+      <button class="icono" id="botonBolsa" type="button" style="--n:0" title="Bolsa (I)" aria-label="Bolsa"><span class="globo" id="bolsaGlobo" hidden></span></button>
+      <button class="icono" id="botonAjustes" type="button" style="--n:2" title="Ajustes (Esc)" aria-label="Ajustes"></button>
+    </div>
+    <div id="avisos"></div>
+    <div id="pista" hidden><span class="icoNota"><canvas width="16" height="16"></canvas></span><span class="txt"></span><i class="chincheta"></i><i class="hojas"></i><i class="estrellita"></i></div>
+    <!-- Cartel con el nombre del sitio al llegar (pueblo o valle) -->
+    <div id="lugar" class="papel washi" hidden><span id="lugarAntes"></span><h1 id="lugarNombre"></h1></div>
+    <!-- Modo decorar: cinta con la pestana arriba y tarjeta del mueble junto al cursor (el cuaderno va en el lienzo) -->
+    <div id="cintaDecorar" hidden></div>
+    <div id="tarjetaDecorar" hidden></div>
+    <!-- Nombre y corazones del vecino que tienes al lado -->
+    <div id="etiquetaVecino" hidden></div>
+
+    <div id="dialogo" hidden>
+      <span class="retrato" id="dialogoRetrato"><span class="ventana"><canvas id="dialogoCara" width="16" height="16"></canvas></span><i class="aro"></i></span>
+      <div class="texto">
+        <span id="dialogoNombre"></span>
+        <p id="dialogoTexto"></p>
+        <p id="dialogoPista" hidden></p>
+        <span id="dialogoPie"></span>
+      </div>
+    </div>
+
+    <!-- Bolsa: el interior de una mochila de cuero. Pestanas de tela, forro de lino con ranuras y la ficha del objeto -->
+    <div class="capa" id="bolsa" hidden>
+      <header class="cabecera">
+        <div class="contadores">
+          <span class="contador" id="bolsaCuentaObjetos" title="Cosas en la bolsa"><i style="--n:5"></i><b></b></span>
+          <span class="contador" id="bolsaCuentaRopa" title="Prendas tejidas"><i style="--n:2"></i><b></b></span>
+          <span class="contador conchitas" id="bolsaCuentaConchitas" title="Conchitas"><i></i><b></b></span>
+        </div>
+        <h1>Mi mochila</h1>
+        <button id="bolsaCerrar" type="button" aria-label="Cerrar la bolsa"><span><kbd>I</kbd></span></button>
+      </header>
+      <nav id="bolsaPestanas"></nav>
+      <div class="interior">
+        <div class="forro"><div id="bolsaRejilla"></div></div>
+        <aside id="bolsaFicha"></aside>
+      </div>
+    </div>
+
+    <!-- Tiendecita de Bellota: mostrador de pino con toldo, bolsita de conchitas, Bellota y su bocadillo, letreros y etiquetas -->
+    <div class="capa" id="tienda" hidden>
+      <div class="toldo"></div>
+      <div class="cabecera">
+        <div id="tiendaConchitas" title="Tus conchitas"><i></i><b></b></div>
+        <h1>La tiendecita de Bellota</h1>
+        <button id="tiendaCerrar" type="button" title="Cerrar (Esc)"><span>Esc</span></button>
+      </div>
+      <div class="atiende">
+        <div class="retrato" id="tiendaRetrato"><div class="ventana"><i class="cara"></i></div><i class="aro"></i></div>
+        <div class="bocadillo"><i class="pico"></i><div id="tiendaDetalle"></div></div>
+      </div>
+      <div class="letreros">
+        <button class="letrero" id="tiendaComprar" type="button">Comprar</button>
+        <button class="letrero" id="tiendaVender" type="button">Vender</button>
+      </div>
+      <div id="tiendaLista"></div>
+    </div>
+
+    <!-- Diario de campo: pagina izquierda con los sellos, derecha con la ficha; pestanas de tela a la derecha -->
+    <div class="capa" id="enciclopedia" hidden>
+      <div class="paginas">
+        <div class="pagina">
+          <header><h1 id="enciTitulo"></h1><span class="resumen" id="enciResumen"></span></header>
+          <div class="sellos" id="enciSellos"></div>
+        </div>
+        <div class="pagina" id="enciFicha"></div>
+      </div>
+      <nav class="pestanas" id="enciPestanas"></nav>
+      <button class="cerrar enci-cerrar" id="enciCerrar" type="button">Cerrar (C)</button>
+    </div>
+
+    <div class="capa" id="vestidor" hidden>
+      <header><h1>Armario</h1></header>
+      <div id="vestidorFilas"></div>
+    </div>
+
+    <div class="capa" id="ajustes" hidden>
+      <header>
+        <h1>Ajustes</h1>
+        <span class="resumen"></span>
+        <button class="cerrar" id="ajustesCerrar" type="button">Cerrar</button>
+      </header>
+      <div class="ajuste">
+        <button id="botonMusica" type="button">Música: sí</button>
+        <input id="volMusica" type="range" min="0" max="100" value="100" aria-label="Volumen de la música">
+      </div>
+      <div class="ajuste">
+        <button id="botonEfectos" type="button">Sonidos: sí</button>
+        <input id="volEfectos" type="range" min="0" max="100" value="100" aria-label="Volumen de los sonidos">
+      </div>
+      <div class="ajuste">
+        <button id="botonReto" type="button">Minijuegos con tiempo: sí</button>
+      </div>
+      <div class="abajo">
+        <button id="botonAyuda" type="button">Cómo se juega (H)</button>
+        <button id="botonTutorial" type="button">Repetir el tutorial</button>
+        <button id="nueva" type="button">Nueva partida</button>
+        <button id="salirJuego" type="button" hidden>Salir del juego</button>
+      </div>
+    </div>
+
+    <div class="capa" id="ayuda" hidden>
+      <nav class="pestanasLibro" id="ayudaPestanas">
+        <button class="pestanaLibro" data-p="0" type="button" style="--m:url(../arte/sprites/ui_pestanaRosa.png)"><canvas width="16" height="16" data-ico="gatita_caminarLado:0"></canvas>Moverse <small>1</small></button>
+        <button class="pestanaLibro" data-p="1" type="button" style="--m:url(../arte/sprites/ui_pestanaDurazno.png)"><canvas width="16" height="16" data-ico="objetos_pesca:0"></canvas>Acciones <small>2</small></button>
+        <button class="pestanaLibro" data-p="2" type="button" style="--m:url(../arte/sprites/ui_pestanaMantequilla.png)"><canvas width="16" height="16" data-ico="hud_tiles:0"></canvas>Herramientas <small>3</small></button>
+        <button class="pestanaLibro" data-p="3" type="button" style="--m:url(../arte/sprites/ui_pestanaLavanda.png)"><canvas width="16" height="16" data-ico="hud_tiles:4"></canvas>Decorar <small>4</small></button>
+        <button class="pestanaLibro" data-p="4" type="button" style="--m:url(../arte/sprites/ui_pestanaRosa.png)"><canvas width="16" height="16" data-ico="mar_tiles:0"></canvas>El mar <small>5</small></button>
+      </nav>
+      <button id="ayudaCerrar" type="button" title="Cerrar (H)"><span>Cerrar · H</span></button>
+      <div class="libro">
+        <i class="lomo"></i>
+        <i class="clip"></i>
+        <i class="cintaLibro" style="left: calc(-6 * var(--u)); top: calc(-4 * var(--u))"></i>
+        <i class="sticker" style="--s:0; right: calc(-8 * var(--u)); bottom: calc(-8 * var(--u))"></i>
+        <i class="sticker" style="--s:5; left: calc(-10 * var(--u)); bottom: calc(-8 * var(--u))"></i>
+        <section class="pliego" data-p="0" style="--c:#E0607E">
+          <div class="pagina">
+            <h1>Cómo se juega</h1>
+          <article class="sec"><h2>Caminar <span class="teclas"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><i>o</i><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd></span></h2><div class="cuerpo"><canvas class="vineta" data-v="caminar" width="48" height="32"></canvas><p>Para ir de un sitio a otro. El mundo es grande: ¡pasea sin prisa!</p></div></article>
+          <article class="sec"><h2>Patinar <span class="teclas"><kbd>Mayús</kbd><i>+</i><kbd>→</kbd></span></h2><div class="cuerpo"><canvas class="vineta" data-v="correr" width="48" height="32"></canvas><p>Mantén <b>Mayús</b> mientras te mueves: la gatita se pone sus <b>patines</b> y va más deprisa. Al soltarla se los quita. En el agua y en la barca no se patina.</p></div></article>
+          </div>
+          <div class="pagina">
+          <article class="sec"><h2>Lo de arriba <span class="teclas"><kbd>C</kbd><kbd>I</kbd><kbd>Esc</kbd></span></h2><div class="cuerpo"><canvas class="vineta" data-v="hud" width="48" height="32"></canvas><p>A la izquierda, el reloj del día y el clima. A la derecha, el <b>diario</b> (C), la <b>bolsa</b> (I) y los <b>ajustes</b> (Esc): música, sonidos, minijuegos con tiempo y tutorial.</p></div></article>
+          <article class="sec"><h2>El mapa <span class="teclas"><kbd>N</kbd></span></h2><div class="cuerpo"><canvas class="vineta" data-v="mapa" width="48" height="32"></canvas><p>El mapa del valle, cuando lo tengas. No hay prisa ni se pierde nada: la partida se guarda sola.</p></div></article>
+          </div>
+        </section>
+        <section class="pliego" data-p="1" style="--c:#E8925A">
+          <div class="pagina">
+            <h1>Acciones</h1>
+          <article class="sec"><h2>Espacio lo hace todo <span class="teclas"><kbd>Espacio</kbd><i>o</i><kbd>E</kbd></span></h2><div class="cuerpo"><canvas class="vineta" data-v="bocadillo" width="48" height="32"></canvas><p>Plantar, regar, cosechar, pescar, hablar, entrar… Un <b>bocadillo</b> sobre el sitio te dice qué hará.</p></div></article>
+          <article class="sec"><h2>Cultivar</h2><div class="cuerpo"><canvas class="vineta" data-v="cultivar" width="48" height="32"></canvas><p>Planta en la tierra y riega <b>tres veces</b>. Lo que brilla ya se cosecha. Con lluvia, el huerto se riega solo.</p></div></article>
+          <article class="sec"><h2>Cavar <span class="teclas"><kbd>Espacio</kbd></span></h2><div class="cuerpo"><canvas class="vineta" data-v="cavar" width="48" height="32"></canvas><p>Con una <b>pala</b>, cava en los montoncitos que brillan por el valle: pulsa cuando la palita pase por la <b>tierra blanda</b>. <b>Pipí</b>, el radar, pita cerca del tesoro escondido.</p></div></article>
+          <article class="sec"><h2>Talar <span class="teclas"><kbd>Espacio</kbd></span></h2><div class="cuerpo"><canvas class="vineta" data-v="talar" width="48" height="32"></canvas><p>Con el <b>hacha</b> de la tiendecita, ponte junto a un árbol del valle y dale <b>tres hachazos</b>: cae, te deja sitio libre y suelta <b>tronquitos de madera</b> para construir mesas, sillas, bancos y vallas.</p></div></article>
+          </div>
+          <div class="pagina">
+          <article class="sec"><h2>Pescar <span class="teclas"><kbd>Espacio</kbd></span></h2><div class="cuerpo"><canvas class="vineta" data-v="pescar" width="48" height="32"></canvas><p>Cuando pique, pulsa Espacio; luego otra vez cuando el pececito pase por lo <b>verde</b>. El centro dorado atrae rarezas.</p></div></article>
+          <article class="sec"><h2>Tejer <span class="teclas"><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd></span></h2><div class="cuerpo"><canvas class="vineta" data-v="tejer" width="48" height="32"></canvas><p>En la <b>cesta de lana de casa</b> la gatita se sienta en su cojín. Elige prenda y tinte y pulsa la flecha del <b>botón que brilla</b>: la prenda crece en el bastidor. Si encadenas puntos, la lana brilla y la casa se pone calentita. Con lluvia, ¡la mitad de puntos!</p></div></article>
+          <article class="sec"><h2>Contra reloj</h2><div class="cuerpo"><canvas class="vineta" data-v="reloj" width="48" height="32"></canvas><p>Al pescar y tejer baja un relojito; fallar <b>resta un poco</b>. Si se acaba no pierdes nada. Se quita en Ajustes.</p></div></article>
+          </div>
+        </section>
+        <section class="pliego" data-p="2" style="--c:#C98F5B">
+          <div class="pagina">
+            <h1>Herramientas</h1>
+          <article class="sec"><h2>La bolsa <span class="teclas"><kbd>I</kbd></span></h2><div class="cuerpo"><canvas class="vineta" data-v="bolsa" width="48" height="32"></canvas><p>Tu mochila. Cambia de bolsillo con <kbd>Q</kbd>/<kbd>R</kbd>, muévete por las ranuras con las flechas y mira en la ficha de la derecha <b>para qué sirve</b> cada cosa. <kbd>Espacio</kbd> elige una semilla o se pone una prenda.</p></div></article>
+          <article class="sec"><h2>Saquito de semillas <span class="teclas"><kbd>G</kbd><i>·</i><kbd>Q</kbd><kbd>R</kbd><i>·</i><kbd>1–9</kbd></span></h2><div class="cuerpo"><canvas class="vineta" data-v="semillas" width="48" height="32"></canvas><p>Ábrelo con <b>G</b> y elige semilla con Q/R, la rueda o tocándola. Los números van siempre.</p></div></article>
+          </div>
+          <div class="pagina">
+          <article class="sec"><h2>Vecinos</h2><div class="cuerpo"><canvas class="vineta" data-v="vecinos" width="48" height="32"></canvas><p>Copito, Nenúfar, Miel y Brisa te dicen qué desean y te dan una <b>pista</b>. Con dos corazones te regalan una herramienta especial.</p></div></article>
+          <article class="sec"><h2>Tiendecita</h2><div class="cuerpo"><canvas class="vineta" data-v="tienda" width="48" height="32"></canvas><p>En la plaza del pueblo, Bellota cambia cosechas y criaturas por <b>conchitas</b>, y vende cebos, abono, flotador, barca, gafas, palas, el hacha y muebles únicos.</p></div></article>
+          <article class="sec"><h2>Tu diario <span class="teclas"><kbd>C</kbd><i>·</i><kbd>Q</kbd><kbd>R</kbd></span></h2><div class="cuerpo"><canvas class="vineta" data-v="diario" width="48" height="32"></canvas><p>Todo lo que has descubierto: criaturas, cultivos, vecinos, herramientas y la playa.</p></div></article>
+          </div>
+        </section>
+        <section class="pliego" data-p="3" style="--c:#9F8BC9">
+          <div class="pagina">
+            <h1>Decorar</h1>
+          <article class="sec"><h2>Modo decorar <span class="teclas"><kbd>B</kbd></span></h2><div class="cuerpo"><canvas class="vineta" data-v="decorar" width="48" height="32"></canvas><p><b>Tab</b> cambia de pestaña, Q/R o 1–9 eligen, flechas o ratón mueven, Espacio o clic coloca o coge, Supr guarda y Ctrl+Z deshace.</p></div></article>
+          <article class="sec"><h2>Tu casita</h2><div class="cuerpo"><canvas class="vineta" data-v="casa" width="48" height="32"></canvas><p>Dentro puedes decorar, cambiarte en el armario y <b>dormir una siesta</b>: los cultivos crecen y, si es de noche, amanece. En Reformas cambias suelo y papel.</p></div></article>
+          </div>
+          <div class="pagina">
+          <article class="sec"><h2>El jardín</h2><div class="cuerpo"><canvas class="vineta" data-v="jardin" width="48" height="32"></canvas><p>Fuera, el modo decorar tiene <b>Flores</b>, <b>Jardín</b> y <b>Exterior</b>. En las bancas te puedes sentar; a las flores vienen mariposas y a la casita, pajaritos.</p></div></article>
+          <article class="sec"><h2>Lluvia y noche</h2><div class="cuerpo"><canvas class="vineta" data-v="lluvia" width="48" height="32"></canvas><p>Con lluvia pican criaturas especiales y los girasoles agachan la cabeza; de noche los tulipanes se cierran y brillan los farolillos.</p></div></article>
+          </div>
+        </section>
+        <section class="pliego" data-p="4" style="--c:#E87F86">
+          <div class="pagina">
+            <h1>El mar</h1>
+          <article class="sec"><h2>La playa</h2><div class="cuerpo"><canvas class="vineta" data-v="playa" width="48" height="32"></canvas><p>Al sur del valle. Cada mañana hay <b>conchas</b> y tesoritos, criaturas en las pozas de marea, castillos de arena, botellas con cartas (¡y mapas!) y Brisa en su caseta.</p></div></article>
+          <article class="sec"><h2>Nadar</h2><div class="cuerpo"><canvas class="vineta" data-v="nadar" width="48" height="32"></canvas><p>Con el <b>flotador</b> de Bellota puedes meterte en cualquier agua. Nadando no se pesca: es para pasear.</p></div></article>
+          </div>
+          <div class="pagina">
+          <article class="sec"><h2>Barca e islotes <span class="teclas"><kbd>Espacio</kbd></span></h2><div class="cuerpo"><canvas class="vineta" data-v="barca" width="48" height="32"></canvas><p>Desde la punta del embarcadero sales a <b>alta mar</b>: tiburones, calamares, ballenas, delfines… y puedes desembarcar en los islotes.</p></div></article>
+          <article class="sec"><h2>Bucear <span class="teclas"><kbd>Espacio</kbd></span></h2><div class="cuerpo"><canvas class="vineta" data-v="bucear" width="48" height="32"></canvas><p>Con las <b>gafas</b>, donde salen burbujas pulsa Espacio. Abre ostras, planta coral (crece cada día) y sube por la cuerda.</p></div></article>
+          <article class="sec"><h2>Noche en el muelle</h2><div class="cuerpo"><canvas class="vineta" data-v="noche" width="48" height="32"></canvas><p>Siéntate en la punta: estrellas fugaces y plancton que brilla. Lo que pica de noche a veces es <b>luminiscente</b>.</p></div></article>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Tutorial de la primera partida: papelito arriba en el centro, entre el reloj y los iconos -->
+    <div id="tutorial" class="papel washi" hidden>
+      <span id="tutorialPaso"></span>
+      <p id="tutorialTexto"></p>
+      <button class="cerrar" id="tutorialSaltar" type="button">Saltar tutorial</button>
+    </div>
+
+    <!-- Partida nueva: elegir donde van la casita y el primer huerto -->
+    <div id="elegirHogar" class="papel washi" hidden>
+      <span id="elegirPaso"></span>
+      <p id="elegirTexto"></p>
+      <p id="elegirTeclas"></p>
+      <p id="elegirAviso"></p>
+      <button class="cerrar" id="elegirVolver" type="button">Cambiar la casa de sitio</button>
+    </div>
+
+    <div class="capa" id="inicio">
+      <div class="hoja papel">
+        <i class="espiral"></i>
+        <i class="cinta"></i>
+        <i class="sticker mece" style="--s:2; right: calc(-14 * var(--u)); top: calc(-12 * var(--u))"></i>
+        <i class="sticker" style="--s:0; left: calc(4 * var(--u)); top: calc(2 * var(--u))"></i>
+        <i class="sticker lapiz" style="--s:8; left: calc(10 * var(--u)); top: calc(40 * var(--u))"></i>
+        <i class="sticker lapiz" style="--s:6; right: calc(4 * var(--u)); top: calc(48 * var(--u))"></i>
+        <i class="sticker" style="--s:4; left: calc(2 * var(--u)); bottom: calc(2 * var(--u))"></i>
+        <i class="sticker mece" style="--s:3; right: calc(-14 * var(--u)); top: 50%"></i>
+        <i class="sticker mece" style="--s:1; right: calc(-12 * var(--u)); bottom: calc(-10 * var(--u))"></i>
+        <h1 class="titulo">
+          <span class="palabra uno" data-t="Proyecto">Proyecto</span>
+          <span class="dos"><span class="palabra" data-t="Estrella">Estrella</span><i class="estrellaTitulo"></i></span>
+        </h1>
+        <p class="lema">Un rinconcito tranquilo para cultivar, pescar, tejer y decorar a tu ritmo.</p>
+        <form id="formNombre" autocomplete="off">
+          <label for="nombre" id="nombreTitulo">¿Cómo te llamas?</label>
+          <div class="cartelito"><input id="nombre" maxlength="14" placeholder="Escribe tu nombre" spellcheck="false"></div>
+          <span id="nombreAviso"></span>
+        </form>
+        <div class="botones">
+          <button class="madera" id="botonJugar" type="button">Jugar</button>
+          <button class="tela" id="botonComoSeJuega" type="button">Cómo se juega</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="sonido.js"></script>
+  <script src="juego.js"></script>
+</body>
+</html>

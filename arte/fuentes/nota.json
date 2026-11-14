@@ -1,0 +1,121 @@
+{
+ "nombre": "nota",
+ "descripcion": "Notas de consejo y dialogo (lo genera arte/generar-notas.py; no editar a mano).",
+ "colores": {
+  "o": "#4A3347",
+  "n": "#C98F6B",
+  "d": "#A87358",
+  "k": "#DDA77F",
+  "w": "#FFF4E0",
+  "b": "#FFFBF3",
+  "e": "#F2DFD0",
+  "h": "#E3C9BC",
+  "v": "#8FC98A",
+  "g": "#5E9E6E",
+  "y": "#FFE08A",
+  "m": "#E8A85C",
+  "p": "#F28CA0",
+  "r": "#D9607E",
+  "l": "#FFB3C1"
+ },
+ "animaciones": {
+  "nota": {
+   "fps": 0,
+   "cuadros": [
+    "nota"
+   ]
+  },
+  "marco": {
+   "fps": 0,
+   "cuadros": [
+    "marco"
+   ]
+  },
+  "adornos": {
+   "fps": 0,
+   "cuadros": [
+    "adornos"
+   ]
+  },
+  "avanzar": {
+   "fps": 0,
+   "cuadros": [
+    "avanzar"
+   ]
+  }
+ },
+ "cuadros": {
+  "nota": [
+   "...oooooooooooooooooo...",
+   ".oobbbbbbbbbbbbbbbbbboo.",
+   ".onnnnnnnnnnnnnnnnnnnno.",
+   "ownwwwwwwwwwwwwwwwwwwnwo",
+   "ownwwwwwwwwwwwwewwwwwnwo",
+   "ownwwwwwwewwwwwwwwwwwnwo",
+   "ownwwwwwwwwwwwwwewwwwnwo",
+   "ownwwwwwwwewwwwwwwwwwnwo",
+   "ownwewwwwwwwwwwwwewwwnwo",
+   "ownwwwwwwwwewwwwwwwwwnwo",
+   "ownwwewwwwwwwwwwwwewwnwo",
+   "ownwwwwwwwwwewwwwwwwwnwo",
+   "ownwwwewwwwwwwwwwwwewnwo",
+   "ownwwwwwwwwwwewwwwwwwnwo",
+   "ownwwwwewwwwwwwwwwwwwnwo",
+   "ownwwwwwwwwwwwewwwwwwnwo",
+   "ownwwwwwewwwwwwwwwwwwnwo",
+   "ownwwwwwwwwwwwwewwwwwnwo",
+   "ownwwwwwwewwwwwwwwwwwnwo",
+   "ownnnnnnnnnnnnnnnnnnnnwo",
+   ".oeeeeeeeeeeeeeeeeeeeeo.",
+   ".oohhhhhhhhhhhhhhhhhhoo.",
+   "...oooooooooooooooooo...",
+   "...oooooooooooooooooo..."
+  ],
+  "marco": [
+   "..oooooooooooooooo..",
+   ".okkkkkkkkkkkkkkkko.",
+   "okbbbbbbbbbbbbbbbbno",
+   "okbbbbbbbbbbbbbbbbno",
+   "okwwwwwwwwwwwwwwwwno",
+   "okwwwwwwwwwwwwwwwwno",
+   "okwwwwwwwwwwwwwwwwno",
+   "okwwwwwwwwwwwwwwwwno",
+   "okwwwwwwwwwwwwwwwwno",
+   "okwwwwwwwwwwwwwwwwno",
+   "okwwwwwwwwwwwwwwwwno",
+   "okwwwwwwwwwwwwwwwwno",
+   "okwwwwwwwwwwwwwwwwno",
+   "okwwwwwwwwwwwwwwwwno",
+   "okwwwwwwwwwwwwwwwwno",
+   "okwwwwwwwwwwwwwwwwno",
+   "okwwwwwwwwwwwwwwwwno",
+   ".oddddddddddddddddo.",
+   "..oooooooooooooooo..",
+   "..oooooooooooooooo.."
+  ],
+  "adornos": [
+   "................................................",
+   ".......ooo.......oo.........oooo........oo.oo...",
+   "......ovvvo......oyo.......olbppo......ollolpo..",
+   ".....ovvvgo.....oyyo.......olpppo......olpopro..",
+   ".oo..ovvggo.ooooyyyoooo....oppprro...oooooyoooo.",
+   "ovvo.ovggo..oyyyyyyyyyo.....orrro...olpoyyyyolpo",
+   "ovvvoogoo....oyyoyyoyo.....oooooo...oppoyyyypppo",
+   "ovvgggo.......oyyyyymo.....orrrro....oooooyoooo.",
+   ".oggoo........oyymmymo......oooo.......olporpo..",
+   "..oo.o.......oymoo.omyo.......o........oppoppo..",
+   ".....o.......ooo....ooo.......o.........oo.oo...",
+   "................................................"
+  ],
+  "avanzar": [
+   "................",
+   ".o.o.o..ooooooo.",
+   "opopopo.oyyyyyo.",
+   ".o.o.o...oyyyo..",
+   "..ooo....oymyo..",
+   ".ollpo....omo...",
+   ".opppo....oo....",
+   "..ooo..........."
+  ]
+ }
+}

@@ -1,0 +1,97 @@
+{
+  "nombre": "casa_suelos",
+  "descripcion": "Suelos de la casa, 16x16 y sin costuras. Madera y parquet van con su color; baldosas y tablas son neutros y el juego los tine con multiply.",
+  "colores": {
+    "w": "#FFFFFF",
+    "g": "#F1E8EC",
+    "h": "#E0D3DB",
+    "x": "#EBC48F",
+    "z": "#D9A871",
+    "k": "#E2B680"
+  },
+  "animaciones": {
+    "tiles": {
+      "fps": 0,
+      "cuadros": [
+        "madera",
+        "parquet",
+        "baldosas",
+        "tablas"
+      ]
+    }
+  },
+  "cuadros": {
+    "madera": [
+      "xxxxxxxzxxxxxxxx",
+      "xxxxxxxzxxxxxxxx",
+      "xxxxxxxzxxxxxxxx",
+      "zzzzzzzzzzzzzzzz",
+      "xxxxxxxxxxxxzxxx",
+      "xxxxxxxxxxxxzxxx",
+      "xxxxxxxxxxxxzxxx",
+      "zzzzzzzzzzzzzzzz",
+      "xxxzxxxxxxxxxxxx",
+      "xxxzxxxxxxxxxxxx",
+      "xxxzxxxxxxxxxxxx",
+      "zzzzzzzzzzzzzzzz",
+      "xxxxxxxxxzxxxxxx",
+      "xxxxxxxxxzxxxxxx",
+      "xxxxxxxxxzxxxxxx",
+      "zzzzzzzzzzzzzzzz"
+    ],
+    "parquet": [
+      "kkkkkkkkkkkzxxxz",
+      "kkkkkkkkkkkzxxxz",
+      "kkkkkkkkkkkzxxxz",
+      "zzzzzzzzkkkzxxxz",
+      "xxxxxxxxkkkzxxxz",
+      "xxxxxxxxkkkzxxxz",
+      "xxxxxxxxkkkzxxxz",
+      "zzzzzzzzkkkzxxxz",
+      "kkkzxxxzkkkkkkkk",
+      "kkkzxxxzkkkkkkkk",
+      "kkkzxxxzkkkkkkkk",
+      "kkkzxxxzzzzzzzzz",
+      "kkkzxxxzxxxxxxxx",
+      "kkkzxxxzxxxxxxxx",
+      "kkkzxxxzxxxxxxxx",
+      "kkkzxxxzzzzzzzzz"
+    ],
+    "baldosas": [
+      "ggggggghwwwwwwwh",
+      "gwggggghwwwwwwwh",
+      "ggggggghwwwwwwwh",
+      "ggggggghwwwwwwwh",
+      "ggggggghwwwwwwwh",
+      "ggggggghwwwwwwwh",
+      "ggggggghwwwwwwwh",
+      "hhhhhhhhhhhhhhhh",
+      "wwwwwwwhgggggggh",
+      "wwwwwwwhgwgggggh",
+      "wwwwwwwhgggggggh",
+      "wwwwwwwhgggggggh",
+      "wwwwwwwhgggggggh",
+      "wwwwwwwhgggggggh",
+      "wwwwwwwhgggggggh",
+      "hhhhhhhhhhhhhhhh"
+    ],
+    "tablas": [
+      "wwwwwwwhwwwwwwww",
+      "wwwwwwwhwwwwwwww",
+      "wwwwwwwhwwwwwwww",
+      "hhhhhhhhhhhhhhhh",
+      "wwwwwwwwwwwwhwww",
+      "wwwwwwwwwwwwhwww",
+      "wwwwwwwwwwwwhwww",
+      "hhhhhhhhhhhhhhhh",
+      "wwwhwwwwwwwwwwww",
+      "wwwhwwwwwwwwwwww",
+      "wwwhwwwwwwwwwwww",
+      "hhhhhhhhhhhhhhhh",
+      "wwwwwwwwwhwwwwww",
+      "wwwwwwwwwhwwwwww",
+      "wwwwwwwwwhwwwwww",
+      "hhhhhhhhhhhhhhhh"
+    ]
+  }
+}

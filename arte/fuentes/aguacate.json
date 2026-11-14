@@ -1,0 +1,36 @@
+{
+  "nombre": "aguacate",
+  "descripcion": "Aguacate malvado: sale a veces al pescar y sirve de abono. Medio aguacate con el hueso como carita picara (cejas fruncidas, ojitos y sonrisa con colmillo).",
+  "colores": {
+    "o": "#4A3347",
+    "g": "#4F7F57",
+    "l": "#B9D77E",
+    "y": "#DDEB9A",
+    "p": "#C08A63",
+    "w": "#FFF4E0",
+    "r": "#E87F86"
+  },
+  "animaciones": {
+    "tiles": { "fps": 0, "cuadros": ["aguacate"] }
+  },
+  "cuadros": {
+    "aguacate": [
+      "................",
+      "......oooo......",
+      ".....oggggo.....",
+      "....ogllllgo....",
+      "...ogllyyllgo...",
+      "...oglyyyylgo...",
+      "..oglyyyyyylgo..",
+      ".oglyyooooyylgo.",
+      ".oglyooppooylgo.",
+      ".oglyopoopoylgo.",
+      ".oglyorpproylgo.",
+      ".oglyooppooylgo.",
+      ".oglyopwopoylgo.",
+      ".oglyyooooyylgo.",
+      "..oggllllllggo..",
+      "...oooooooooo..."
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+# Dependencias y builds del .exe (se rehacen con npm install / npm run exe)
+escritorio/node_modules/
+escritorio/dist/
+escritorio/app/
+*.exe
+
+# Trailer: fotogramas y video (el video va en la Release)
+trailer/cuadros/
+trailer/*.mp4
+
+# Sprites ampliados para revisar a ojo
+arte/sprites/*_x8.png
+
+__pycache__/

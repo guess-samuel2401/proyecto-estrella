@@ -1,0 +1,383 @@
+{
+ "nombre": "bolsa",
+ "descripcion": "Panel de la bolsa (lo genera arte/generar-bolsa.py; no editar a mano).",
+ "colores": {
+  "o": "#4A3347",
+  "w": "#FFFFFF",
+  "a": "#D9A27A",
+  "b": "#E8BC94",
+  "c": "#B8805C",
+  "d": "#9C6B4E",
+  "e": "#FFF4E0",
+  "l": "#F6E3D6",
+  "m": "#EBD3C2",
+  "n": "#D2B19C",
+  "p": "#FFF8F0",
+  "q": "#B08470",
+  "f": "#F28CA0",
+  "y": "#FFE9B0",
+  "u": "#FFF6D6",
+  "z": "#E8C77A",
+  "r": "#F7A6B4",
+  "s": "#FFD3DC",
+  "t": "#E0607E",
+  "g": "#E8B84F",
+  "h": "#FFE08A",
+  "k": "#B8862E",
+  "i": "#8FC98A",
+  "j": "#5E9E6E",
+  "v": "#A9D8E8",
+  "x": "#C9A7D8"
+ },
+ "animaciones": {
+  "cuero": {
+   "fps": 0,
+   "cuadros": [
+    "cuero"
+   ]
+  },
+  "forro": {
+   "fps": 0,
+   "cuadros": [
+    "forro"
+   ]
+  },
+  "ficha": {
+   "fps": 0,
+   "cuadros": [
+    "ficha"
+   ]
+  },
+  "ranura": {
+   "fps": 0,
+   "cuadros": [
+    "ranura"
+   ]
+  },
+  "ranuraElegida": {
+   "fps": 0,
+   "cuadros": [
+    "ranuraElegida"
+   ]
+  },
+  "pestana": {
+   "fps": 0,
+   "cuadros": [
+    "pestana"
+   ]
+  },
+  "pestanaElegida": {
+   "fps": 0,
+   "cuadros": [
+    "pestanaElegida"
+   ]
+  },
+  "broche": {
+   "fps": 0,
+   "cuadros": [
+    "broche"
+   ]
+  },
+  "plato": {
+   "fps": 0,
+   "cuadros": [
+    "plato"
+   ]
+  },
+  "iconos": {
+   "fps": 0,
+   "cuadros": [
+    "saquito",
+    "pez",
+    "camiseta",
+    "sillon",
+    "pala",
+    "hoja"
+   ]
+  }
+ },
+ "cuadros": {
+  "cuero": [
+   "...oooooooooooooooooo...",
+   ".oobbbbbbbbbbbbbbbbbboo.",
+   ".oaaaacaaaaaaaaaaaaaaco.",
+   "obaaaaaaacaaaaaaaaaaacdo",
+   "obaaaeaeeaeeceeaeeaaacdo",
+   "obaaeaaaaaaaaaacaaaeacdo",
+   "obaaaaaaaaaaaaaaaacaacdo",
+   "obaaeaaaaaaaaaaaaaaeacdo",
+   "obaaeaacaaaaaaaaaaaeacdo",
+   "obaaaaaaaacaaaaaaaaaacdo",
+   "obaaeaaaaaaaacaaaaaeacdo",
+   "obaaeaaaaaaaaaaacaaeacdo",
+   "obcaaaaaaaaaaaaaaaacacdo",
+   "obaaecaaaaaaaaaaaaaeacdo",
+   "obaaeaaacaaaaaaaaaaeacdo",
+   "obaaaaaaaaacaaaaaaaaacdo",
+   "obaaeaaaaaaaaacaaaaeacdo",
+   "obaaeaaaaaaaaaaaacaeacdo",
+   "obacaaaaaaaaaaaaaaaaccdo",
+   "obaaaeceeaeeaeeaeeaaacdo",
+   "obaaaaaaacaaaaaaaaaaacdo",
+   ".occcccccccccccccccccco.",
+   ".ooddddddddddddddddddoo.",
+   "...oooooooooooooooooo..."
+  ],
+  "forro": [
+   "..oooooooooooooooooooo..",
+   ".onnnnnnnnnnnnnnnnnnnno.",
+   "onnnnnnnnnnnnnnnnnnnnnno",
+   "onnllllllllllllllllllllo",
+   "onnlmflfflffmfflffllmllo",
+   "onnlfllllllllllllllflllo",
+   "onnlllmlllmlllmlllmlllmo",
+   "onnlfllllllllllllllflllo",
+   "onnlflllmlllmlllmllfmllo",
+   "onnllllllllllllllllllllo",
+   "onnlflmlllmlllmlllmfllmo",
+   "onnlfllllllllllllllflllo",
+   "onnlmlllmlllmlllmlllmllo",
+   "onnlfllllllllllllllflllo",
+   "onnlflmlllmlllmlllmfllmo",
+   "onnllllllllllllllllllllo",
+   "onnlflllmlllmlllmllfmllo",
+   "onnlfllllllllllllllflllo",
+   "onnlllmlllmlllmlllmlllmo",
+   "onnllflfflfflfflfflllllo",
+   "onnlmlllmlllmlllmlllmllo",
+   "onnllllllllllllllllllllo",
+   ".onlllmlllmlllmlllmlllo.",
+   "..oooooooooooooooooooo.."
+  ],
+  "ficha": [
+   "...oooooooooooooooooo...",
+   ".ooppppppppppppppppppoo.",
+   ".oeemeeeeeeeeeemeeeeemo.",
+   "opeeeqqqeqqqeqqqeqqqemno",
+   "opeeeeeemeeeeeeeeeememno",
+   "opeqeeeeeemeeeeeeeeeqmno",
+   "opeqeeeeeeeemeeeeeeeqmno",
+   "opeqeeeeeeeeeemeeeeeqmno",
+   "opeeemeeeeeeeeeemeeeemno",
+   "opeqeeemeeeeeeeeeemeqmno",
+   "opeqeeeeemeeeeeeeeeeqmno",
+   "opeqeeeeeeemeeeeeeeeqmno",
+   "opmeeeeeeeeeemeeeeeeemno",
+   "opeqmeeeeeeeeeemeeeeqmno",
+   "opeqeemeeeeeeeeeemeeqmno",
+   "opeqeeeemeeeeeeeeeemqmno",
+   "opeeeeeeeemeeeeeeeeeemno",
+   "opeqeeeeeeeemeeeeeeeqmno",
+   "opeqeeeeeeeeeemeeeeeqmno",
+   "opeqemeeeeeeeeeemeeeqmno",
+   "opeeeqqqeqqqeqqqeqqqemno",
+   ".ommmmmmmmmmmmmmmmmmmmo.",
+   ".oonnnnnnnnnnnnnnnnnnoo.",
+   "...oooooooooooooooooo..."
+  ],
+  "ranura": [
+   "...qqqqqqqqqqqqqq...",
+   ".qqnnnnnnnnnnnnnnqq.",
+   ".qnnnnnnnnnnnnnnnnq.",
+   "qnnmnnmnnmnnmnnmmppq",
+   "qnnnmmmmmmmmmmmmnppq",
+   "qnnnmmmmmmmmmmmmnppq",
+   "qnnmmmmmmmmmmmmmmppq",
+   "qnnnmmmmmmmmmmmmnppq",
+   "qnnnmmmmmmmmmmmmnppq",
+   "qnnmmmmmmmmmmmmmmppq",
+   "qnnnmmmmmmmmmmmmnppq",
+   "qnnnmmmmmmmmmmmmnppq",
+   "qnnmmmmmmmmmmmmmmppq",
+   "qnnnmmmmmmmmmmmmnppq",
+   "qnnnmmmmmmmmmmmmnppq",
+   "qnnmmmmmmmmmmmmmmppq",
+   "qnnmnnmnnmnnmnnmmppq",
+   ".qnpppppppppppppppq.",
+   ".qqppppppppppppppqq.",
+   "...qqqqqqqqqqqqqq..."
+  ],
+  "ranuraElegida": [
+   "...tttttttttttttt...",
+   ".ttfzfzfzfzfzfzfzft.",
+   ".tzzzzzzzzzzzzzzzzt.",
+   "tfzyyyyyyyyyyyyyyuft",
+   "tzzyyyyyyyyyyyyyyuut",
+   "tfzyyyyyyyyyyyyyyuft",
+   "tzzyyyyyyyyyyyyyyuut",
+   "tfzyyyyyyyyyyyyyyuft",
+   "tzzyyyyyyyyyyyyyyuut",
+   "tfzyyyyyyyyyyyyyyuft",
+   "tzzyyyyyyyyyyyyyyuut",
+   "tfzyyyyyyyyyyyyyyuft",
+   "tzzyyyyyyyyyyyyyyuut",
+   "tfzyyyyyyyyyyyyyyuft",
+   "tzzyyyyyyyyyyyyyyuut",
+   "tfzyyyyyyyyyyyyyyuft",
+   "tzzyyyyyyyyyyyyyyuut",
+   ".fzuuuuuuuuuuuuuuuf.",
+   ".ttfufufufufufufuft.",
+   "...tttttttttttttt..."
+  ],
+  "pestana": [
+   "...oooooooooo...",
+   ".ooppppppppppoo.",
+   ".ollllllllllllo.",
+   "opllqqlqqlqqlllo",
+   "oplqllllllllqllo",
+   "oplqllllllllqllo",
+   "oplllllllllllllo",
+   "oplqllllllllqllo",
+   "oplqllllllllqllo",
+   "oplllllllllllllo",
+   "oplqllllllllqllo",
+   "oplqllllllllqllo",
+   "opllqqlqqlqqlllo",
+   ".onnnnnnnnnnnno.",
+   ".oonnnnnnnnnnoo.",
+   "...oooooooooo..."
+  ],
+  "pestanaElegida": [
+   "...oooooooooo...",
+   ".oossssssssssoo.",
+   ".orrrrrrrrrrrro.",
+   "osrreereereerrro",
+   "osrerrrrrrrrerro",
+   "osrerrrrrrrrerro",
+   "osrrrrrrrrrrrrro",
+   "osrerrrrrrrrerro",
+   "osrerrrrrrrrerro",
+   "osrrrrrrrrrrrrro",
+   "osrerrrrrrrrerro",
+   "osrerrrrrrrrerro",
+   "osrreereereerrro",
+   ".otttttttttttto.",
+   ".oottttttttttoo.",
+   "...oooooooooo..."
+  ],
+  "broche": [
+   "....oooooooo....",
+   "..oobbbbbbbboo..",
+   ".obbeebeebeebbo.",
+   ".oaaaaaooaaaaao.",
+   "oaeaaoohhooaaeao",
+   "oaeaohhhgggoaeao",
+   "oaaaohwggggoaaao",
+   "oaeohhgggggkoeao",
+   "oaeohgggggkkoeao",
+   "oaaaoggggkkoaaao",
+   "oaeaogggkkkoaeao",
+   "oaeaaookkooaaeao",
+   ".oaaaaaooaaaaao.",
+   ".oddeedeedeeddo.",
+   "..ooddddddddoo..",
+   "....oooooooo...."
+  ],
+  "plato": [
+   ".........qq.........",
+   "......qqqnnqqq......",
+   "....qqnllllllnqq....",
+   "...qnllllllllllnq...",
+   "..qnllllllllllllpq..",
+   "..qllllllllllllllq..",
+   ".qnllllllllllllllpq.",
+   ".qllllllllllllllllq.",
+   ".qllllllllllllllllq.",
+   "qnllllllllllllllllpq",
+   "qnllllllllllllllllpq",
+   ".qllllllllllllllllq.",
+   ".qllllllllllllllllq.",
+   ".qnllllllllllllllpq.",
+   "..qllllllllllllllq..",
+   "..qnllllllllllllpq..",
+   "...qpllllllllllpq...",
+   "....qqpllllllpqq....",
+   "......qqqppqqq......",
+   ".........qq........."
+  ],
+  "saquito": [
+   "....o..o....",
+   "...ofoof....",
+   "....oggo....",
+   "...oaaaao...",
+   "..oabbaaao..",
+   ".oabaaaaaco.",
+   ".oaaaiaaaco.",
+   ".oaaijaaaco.",
+   ".oaaaaaacco.",
+   "..occcccco..",
+   "...oooooo...",
+   "............"
+  ],
+  "pez": [
+   "............",
+   "....oooo....",
+   "..oovvvvo.o.",
+   ".ovvvvvvvoo.",
+   "ovowvvvvvvvo",
+   "ovvvvvvvvvvo",
+   ".ovfvvvvvoo.",
+   "..oovvvvo.o.",
+   "....oooo....",
+   "............",
+   "............",
+   "............"
+  ],
+  "camiseta": [
+   "............",
+   "..ooo..ooo..",
+   ".orrroorrro.",
+   "orrrrrrrrrro",
+   "orroresrrrro",
+   ".oorrrrrroo.",
+   "...orrrrro..",
+   "...orsrrro..",
+   "...orrrrro..",
+   "...otttttro.",
+   "....ooooo...",
+   "............"
+  ],
+  "sillon": [
+   "............",
+   "...oooooo...",
+   "..oxxxxxxo..",
+   ".ooxxxxxxoo.",
+   "oxoxxxxxxoxo",
+   "oxooooooooxo",
+   "oxxxxxxxxxxo",
+   "oxxxxxxxxxxo",
+   ".oooooooooo.",
+   ".od......do.",
+   ".oo......oo.",
+   "............"
+  ],
+  "pala": [
+   "........ooo.",
+   ".......odbo.",
+   "......odbo..",
+   ".....odbo...",
+   "....odbo....",
+   "..oood.o....",
+   ".ohhgoo.....",
+   "ohhggko.....",
+   "ohgggko.....",
+   "oggkko......",
+   ".okko.......",
+   "..oo........"
+  ],
+  "hoja": [
+   "........ooo.",
+   "......ooiio.",
+   "....ooiiiio.",
+   "...oiiijiio.",
+   "..oiiijiiio.",
+   "..oiijiiio..",
+   ".oiijiiio...",
+   ".oijiiio....",
+   ".ojoooo.....",
+   "oj..........",
+   "o...........",
+   "............"
+  ]
+ }
+}

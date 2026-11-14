@@ -1,0 +1,55 @@
+{
+  "nombre": "naturaleza",
+  "descripcion": "Elementos fijos del mundo de 16x16 que bloquean el paso: arbolito y roca.",
+  "colores": {
+    "o": "#4A3347",
+    "g": "#7FBF8E",
+    "m": "#BFE3B4",
+    "d": "#62A87C",
+    "h": "#8A5A44",
+    "q": "#C9C2D6",
+    "z": "#A79FBA",
+    "w": "#FFF4E0"
+  },
+  "animaciones": {
+    "tiles": { "fps": 0, "cuadros": ["arbol", "roca"] }
+  },
+  "cuadros": {
+    "arbol": [
+      ".....oooooo.....",
+      "...oogggmmggoo..",
+      "..ogggggmmmggo..",
+      ".oggggggggmmggo.",
+      ".ogggggggggggmo.",
+      "oggggggggggggggo",
+      "oggggggggggggggo",
+      "ogdggggggggggdgo",
+      ".oddggggggggddo.",
+      ".oddddggggddddo.",
+      "..ooddddddddoo..",
+      "....ooohhooo....",
+      "......ohho......",
+      "......ohho......",
+      ".....oohhoo.....",
+      ".....oooooo....."
+    ],
+    "roca": [
+      "................",
+      "................",
+      "................",
+      "................",
+      "................",
+      "................",
+      "................",
+      "................",
+      ".....oooooo.....",
+      "...ooqqqqqqoo...",
+      "..oqqwqqqqqqzo..",
+      ".oqqqqqqqqqzzzo.",
+      ".oqqqqqqqzzzzzo.",
+      ".ozzzzzzzzzzzzo.",
+      "..oooooooooooo..",
+      "................"
+    ]
+  }
+}

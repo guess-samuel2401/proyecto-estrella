@@ -1,0 +1,144 @@
+{
+  "nombre": "tienda",
+  "descripcion": "La tiendecita del pueblo: Bellota la eriza (tendera, con parpadeo) y lo que vende o con lo que se paga (cebo brillante, conchita).",
+  "colores": {
+    "o": "#4A3347",
+    "n": "#B98A6E",
+    "d": "#8E6450",
+    "e": "#F5DCC0",
+    "f": "#F7A6B4",
+    "w": "#FFF4E0",
+    "r": "#E87F86",
+    "y": "#FFE08A",
+    "p": "#F28CA0",
+    "s": "#FFE9DC"
+  },
+  "animaciones": {
+    "tendera": {
+      "fps": 0,
+      "cuadros": [
+        "bellota",
+        "bellotaParpadea"
+      ]
+    },
+    "tiles": {
+      "fps": 0,
+      "cuadros": [
+        "cebo",
+        "conchita",
+        "flotador",
+        "barca"
+      ]
+    }
+  },
+  "cuadros": {
+    "bellota": [
+      "...o.o.o.o.o....",
+      "..onondndnono...",
+      ".ondnnndnnndno..",
+      ".onnndnnndnnnno.",
+      "ondnnoooooonndno",
+      "onnnoeeeeeeonnno",
+      "ondoeeoeeoeeodno",
+      "onnoeeoeeoeeonno",
+      ".onoffeooeffono.",
+      "..ooeeeeeeeeoo..",
+      "...oowwwwwwoo...",
+      "..orwrrrrrrwro..",
+      "..orrryyyyrrro..",
+      "...orryyyyrro...",
+      "...oeeooooeeo...",
+      "....oo....oo...."
+    ],
+    "bellotaParpadea": [
+      "...o.o.o.o.o....",
+      "..onondndnono...",
+      ".ondnnndnnndno..",
+      ".onnndnnndnnnno.",
+      "ondnnoooooonndno",
+      "onnnoeeeeeeonnno",
+      "ondoeeeeeeeeodno",
+      "onnoeeoeeoeeonno",
+      ".onoffeooeffono.",
+      "..ooeeeeeeeeoo..",
+      "...oowwwwwwoo...",
+      "..orwrrrrrrwro..",
+      "..orrryyyyrrro..",
+      "...orryyyyrro...",
+      "...oeeooooeeo...",
+      "....oo....oo...."
+    ],
+    "cebo": [
+      "................",
+      ".......y........",
+      "......yoy.......",
+      ".......o........",
+      ".......o........",
+      "......oppo......",
+      ".....offppo.....",
+      "....offwfppo....",
+      "....ofwffppo....",
+      "....offfpppo....",
+      ".....offppo.....",
+      "......oppo......",
+      ".......oo.......",
+      "......o..o......",
+      ".....oy..yo.....",
+      "......o..o......"
+    ],
+    "conchita": [
+      "................",
+      "................",
+      "................",
+      "................",
+      ".....oooooo.....",
+      "...oossffssoo...",
+      "...osssffssso...",
+      "..ofsssffsssfo..",
+      "..offssffssffo..",
+      "..offssffssffo..",
+      "..osffsffsffso..",
+      "...ooffssffoo...",
+      ".....ofssfo.....",
+      "......offo......",
+      "......oooo......",
+      "................"
+    ],
+    "flotador": [
+      "................",
+      "................",
+      ".....oooooo.....",
+      "...oofffwwfoo...",
+      "..ofwwfffwwffo..",
+      ".ofwfooooooffwo.",
+      ".offo......owwo.",
+      "owwfo......offwo",
+      "offwo......owffo",
+      ".owfo......offo.",
+      ".offwoooooowwfo.",
+      "..offwwfffwwfo..",
+      "...oowwfffwoo...",
+      ".....oooooo.....",
+      "................",
+      "................"
+    ],
+    "barca": [
+      "................",
+      "................",
+      ".......o........",
+      ".......opo......",
+      ".......oppo.....",
+      ".......ofppo....",
+      ".......offppo...",
+      ".......ooooooo..",
+      ".......o........",
+      "ooooooooooooooo.",
+      "owwwwwwwwwwwwwo.",
+      ".onnnnnnnnnnno..",
+      ".orrrrrrrrrrro..",
+      "..onnnnnnnnno...",
+      "...ooooooooo....",
+      "................"
+    ]
+  }
+}
